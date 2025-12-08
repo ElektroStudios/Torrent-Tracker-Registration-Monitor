@@ -1,6 +1,15 @@
 # MTAFRAT Change Log 📋
 
-## v1.1.9 *(current)* 🆕
+## v1.1.10 *(current)* 🆕
+
+#### 🌟 Improvements:
+- Added new plugins:
+  - eMuwarez
+  - GazelleGames
+- Updated NuGet packages:
+  - Selenium.Webdriver (used for Chrome automation)
+
+## v1.1.9 🔄
 
 #### 🛠️ Fixes:
 - Fixed malfunctioning plugins:
