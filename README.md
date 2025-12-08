@@ -70,61 +70,65 @@ All plugins are located in the `plugins` folder. If you don't find one of them u
 
 🔧 Built-in plugins
 
-- 3ChangTrai      
-- 3D Torrents     
-- 4th Dimension   
-- AlphaRatio      
-- Animebytes      
-- AnimeTorrents   
-- AvistaZ         
-- BeyondHD        
-- BitPorn         
-- Blutopia        
-- Cinemageddon    
-- CinemaZ         
-- DarkPeers       
-- Digital Core    
-- Elite-HD        
-- ExoticaZ        
-- Fappaizuri      
-- FearNoPeer      
-- Femdomcult      
-- GreatPosterWall 
-- HD Dolby        
-- HD-Forever      
-- HD-Olimpo       
-- HD-Space        
-- HD-Zero         
-- HDHome          
-- HDTime          
-- Hebits          
-- iPtorrents      
-- Kleverig        
-- KrazyZone       
-- Lat-Team        
-- Locadora        
-- LST             
-- More Than TV    
-- NicePT          
-- Old Toons World 
-- OnlyEncodes     
-- PassThePopcorn  
-- PrivateHD       
-- Punto Torrent   
-- Rastastugan     
-- ReelFlix        
-- SceneRush       
-- SeedFile        
-- SportsCult      
-- Superbits       
-- Tekno3D         
-- TorrentCFF      
-- Torrent Day     
-- Torrenteros     
-- TorrentLand     
-- TorrentLeech    
-- Upscale Vault   
-- xBytesv2       
+- # Site Auto Login
+- 3ChangTrai
+- 3D Torrents
+- 4th Dimension
+- AlphaRatio
+- Animebytes
+- AnimeTorrents
+- AvistaZ
+- BeyondHD
+- BitPorn
+- Blutopia
+- Cinemageddon
+- CinemaZ
+- DarkPeers
+- Digital Core
+- Elite-HD
+- eMuwarez
+- ExoticaZ
+- Fappaizuri
+- FearNoPeer
+- Femdomcult
+- GazelleGames
+- GreatPosterWall
+- HD Dolby
+- HD-Forever
+- HD-Olimpo
+- HD-Space
+- HD-Zero
+- HDHome
+- HDTime
+- Hebits
+- iPtorrents
+- Kleverig
+- KrazyZone
+- Lat-Team
+- Locadora
+- LST
+- More Than TV
+- NicePT
+- Old Toons World
+- OnlyEncodes
+- ParabellumHD
+- PassThePopcorn
+- PrivateHD
+- Punto Torrent
+- Rastastugan
+- ReelFlix
+- SceneRush
+- SeedFile
+- SportsCult
+- Superbits
+- Tekno3D
+- TorrentCFF
+- Torrent Day
+- Torrenteros
+- TorrentLand
+- TorrentLeech
+- Upscale Vault
+- xBytesv2
 
 ## 🖼️ Screenshots
 

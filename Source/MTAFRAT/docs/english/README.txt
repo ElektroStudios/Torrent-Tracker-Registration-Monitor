@@ -51,63 +51,67 @@ _____________
 
 🔧 Built-in plugins
 
-	Index  Name            Url
-	------ ------          ---
-	01     3ChangTrai      https://3changtrai.com/signup.php
-	02     3D Torrents     http://www.3dtorrents.org/index.php?page=signup
-	03     4th Dimension   https://4thd.xyz/register.php
-	04     AlphaRatio      https://alpharatio.cc/register.php
-	05     Animebytes      https://animebytes.tv/register/apply
-	06     AnimeTorrents   https://animetorrents.me/register.php
-	07     AvistaZ         https://avistaz.to/auth/register
-	08     BeyondHD        https://beyond-hd.me/login
-	09     BitPorn         https://bitporn.eu/register
-	10     Blutopia        https://blutopia.cc/application
-	11     Cinemageddon    https://cinemageddon.net/signup.php
-	12     CinemaZ         https://cinemaz.to/auth/register
-	13     DarkPeers       https://darkpeers.org/register
-	14     Digital Core    https://digitalcore.club/signup/
-	15     Elite-HD        https://www.elitehd.li/ucp.php?mode=register
-	16     ExoticaZ        https://exoticaz.to/register
-	17     Fappaizuri      https://fappaizuri.me/account-signup.php
-	18     FearNoPeer      https://fearnopeer.com/register
-	19     Femdomcult      https://femdomcult.org/
-	20     GreatPosterWall https://greatposterwall.com/register.php
-	21     HD Dolby        https://www.hddolby.com/signup.php
-	22     HD-Forever      https://hdf.world/register.php
-	23     HD-Olimpo       https://hd-olimpo.club/login
-	24     HD-Space        https://hd-space.org/index.php?page=signup
-	25     HD-Zero         https://www.hdzero.org/register
-	26     HDHome          https://hdhome.org/signup.php
-	27     HDTime          https://hdtime.org/signup.php
-	28     Hebits          https://hebits.net/register.php
-	29     iPtorrents      https://www.iptorrents.com/signup.php
-	30     Kleverig        https://www.kleverig.eu/register.php
-	31     KrazyZone       https://krazyzone.net/account-signup.php
-	32     Lat-Team        https://lat-team.com/application
-	33     Locadora        https://locadora.cc/register
-	34     LST             https://lst.gg/register
-	35     More Than TV    https://www.morethantv.me/application
-	36     NicePT          https://www.nicept.net/signup.php
-	37     Old Toons World https://oldtoons.world/register
-	38     OnlyEncodes     https://onlyencodes.cc/application
-	39     PassThePopcorn  https://passthepopcorn.me/register.php
-	40     PrivateHD       https://privatehd.to/auth/register
-	41     Punto Torrent   https://xbt.puntotorrent.com/index.php?page=signup
-	42     Rastastugan     https://rastastugan.org/register
-	43     ReelFlix        https://reelflix.xyz/register
-	44     SceneRush       https://www.scene-rush.com/signup.php
-	45     SeedFile        https://seedfile.io/register
-	46     SportsCult      https://sportscult.org/index.php?page=signup
-	47     Superbits       https://login.superbits.org/signup/
-	48     Tekno3D         https://tracker.tekno3d.com/signup.php
-	49     TorrentCFF      https://et8.org/signup.php
-	50     Torrent Day     https://www.torrentday.me/register.php
-	51     Torrenteros     https://torrenteros.org/application
-	52     TorrentLand     https://torrentland.li/login
-	53     TorrentLeech    https://www.torrentleech.org/
-	54     Upscale Vault   https://upscalevault.com/register
-	55     xBytesv2        https://xbytesv2.li/register
+	Index  Name             Url
+	------ ------           ---
+	01    # Site Auto Login
+	02    3ChangTrai        https://3changtrai.com/login.php
+	03    3D Torrents       http://www.3dtorrents.org/index.php?page=login
+	04    4th Dimension     https://4thd.xyz/login.php
+	05    AlphaRatio        https://alpharatio.cc/login.php
+	06    Animebytes        https://animebytes.tv/user/login
+	07    AnimeTorrents     https://animetorrents.me/login.php
+	08    AvistaZ           https://avistaz.to/auth/login
+	09    BeyondHD          https://beyond-hd.me/login
+	10    BitPorn           https://bitporn.eu/login
+	11    Blutopia          https://blutopia.cc/login
+	12    Cinemageddon      https://cinemageddon.net/login.php
+	13    CinemaZ           https://cinemaz.to/auth/login
+	14    DarkPeers         https://darkpeers.org/login
+	15    Digital Core      https://digitalcore.club/login
+	16    Elite-HD          https://www.elitehd.li/ucp.php?mode=login
+	17    eMuwarez          https://emuwarez.com/login
+	18    ExoticaZ          https://exoticaz.to/login
+	19    Fappaizuri        https://fappaizuri.me/account-login.php
+	20    FearNoPeer        https://fearnopeer.com/login
+	21    Femdomcult        https://femdomcult.org/login
+	22    GazelleGames      https://gazellegames.net/login.php
+	23    GreatPosterWall   https://greatposterwall.com/login.php
+	24    HD Dolby          https://www.hddolby.com/login.php
+	25    HD-Forever        https://hdf.world/login.php
+	26    HD-Olimpo         https://hd-olimpo.club/login
+	27    HD-Space          https://hd-space.org/index.php?page=login
+	28    HD-Zero           https://www.hdzero.org/login
+	29    HDHome            https://hdhome.org/login.php
+	30    HDTime            https://hdtime.org/login.php
+	31    Hebits            https://hebits.net/login.php
+	32    iPtorrents        https://www.iptorrents.com/login.php
+	33    Kleverig          https://www.kleverig.eu/login.php?do=login
+	34    KrazyZone         https://krazyzone.net/account-login.php
+	35    Lat-Team          https://lat-team.com/login
+	36    Locadora          https://locadora.cc/login
+	37    LST               https://lst.gg/login
+	38    More Than TV      https://www.morethantv.me/login
+	39    NicePT            https://www.nicept.net/login.php
+	40    Old Toons World   https://oldtoons.world/login
+	41    OnlyEncodes       https://onlyencodes.cc/login
+	42    ParabellumHD      https://parabellumhd.cx/login.php
+	43    PassThePopcorn    https://passthepopcorn.me/login.php
+	44    PrivateHD         https://privatehd.to/auth/login
+	45    Punto Torrent     https://xbt.puntotorrent.com/index.php?page=login
+	46    Rastastugan       https://rastastugan.org/login
+	47    ReelFlix          https://reelflix.cc/login
+	48    SceneRush         https://www.scene-rush.com/login.php
+	49    SeedFile          https://seedfile.io/home
+	50    SportsCult        https://sportscult.org/index.php?page=login
+	51    Superbits         https://login.superbits.org/login
+	52    Tekno3D           https://tracker.tekno3d.com/login.php
+	53    TorrentCFF        https://et8.org/login.php
+	54    Torrent Day       https://www.torrentday.me/login.php
+	55    Torrenteros       https://torrenteros.org/login
+	56    TorrentLand       https://torrentland.li/login
+	57    TorrentLeech      https://www.torrentleech.org/
+	58    Upscale Vault     https://upscalevault.com/login
+	59    xBytesv2          https://xbytesv2.li/login
 
 💡 Tips
 
