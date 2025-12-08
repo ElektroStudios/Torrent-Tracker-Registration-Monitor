@@ -70,7 +70,7 @@ All plugins are located in the `plugins` folder. If you don't find one of them u
 
 🔧 Built-in plugins
 
-- # Site Auto Login
+- \# Site Auto Login
 - 3ChangTrai
 - 3D Torrents
 - 4th Dimension
