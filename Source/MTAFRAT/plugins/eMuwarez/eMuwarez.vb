@@ -16,8 +16,8 @@ Class EmuwarezPlugin : Inherits DynamicPlugin
     ReadOnly headless As Boolean = True
     ReadOnly additionalArgs As String() = Array.Empty(Of String)
 
-    ReadOnly registrationTriggers As String() = {"REGISTRARSE"}
-    ReadOnly registrationTriggersIndicatesOpen As Boolean = True
+    ReadOnly registrationTriggers As String() = {"Registros están CERRADOS"}
+    ReadOnly registrationTriggersIndicatesOpen As Boolean = False
 
     ReadOnly applicationTriggers As String() = {"aplicaciones están cerradas"}
     ReadOnly applicationTriggersIndicatesOpen As Boolean = False

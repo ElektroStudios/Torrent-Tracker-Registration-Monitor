@@ -1,6 +1,16 @@
 # MTAFRAT Change Log 📋
 
-## v1.1.10 *(current)* 🆕
+## v1.1.11 *(current)* 🆕
+
+#### 🛠️ Fixes:
+- The eMuwarez plugin was failing to correctly analyze the registration form.
+- The automatic execution timer was not updating nor being saved and restored properly.
+
+#### 🌟 Improvements:
+- Updated NuGet packages:
+  - System.Management
+
+## v1.1.10 🔄
 
 #### 🌟 Improvements:
 - Added new plugins:

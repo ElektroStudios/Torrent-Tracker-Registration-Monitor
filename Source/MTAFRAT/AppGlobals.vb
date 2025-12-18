@@ -37,7 +37,7 @@ Public Module AppGlobals
     ''' <summary>
     ''' Default time interval between automatic plugin executions.
     ''' </summary>
-    Public AutomaticPluginRunInterval As TimeSpan = TimeSpan.FromHours(1)
+    Friend AutomaticPluginRunInterval As TimeSpan = TimeSpan.FromHours(1)
 
     ''' <summary>
     ''' The application title and version, formatted as "ProductName (AssemblyName) vMajor.Minor".

@@ -18,8 +18,8 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Product>Multi-Tracker and Forums Registration Availability Tool</Product>
     <UseApplicationFramework>true</UseApplicationFramework>
-    <AssemblyVersion>1.1.10</AssemblyVersion>
-    <FileVersion>1.1.10</FileVersion>
+    <AssemblyVersion>1.1.11</AssemblyVersion>
+    <FileVersion>1.1.11</FileVersion>
     <RepositoryUrl>https://github.com/ElektroStudios/MTAFRAT-Multi_Tracker_and_Forums_Registration_Availability_Tool</RepositoryUrl>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -36,7 +36,7 @@
     <PackageReference Include="Jot" Version="2.1.17" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="5.0.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.39.0" />
-    <PackageReference Include="System.Management" Version="10.0.0" />
+    <PackageReference Include="System.Management" Version="10.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="My Project\Application.Designer.vb">
