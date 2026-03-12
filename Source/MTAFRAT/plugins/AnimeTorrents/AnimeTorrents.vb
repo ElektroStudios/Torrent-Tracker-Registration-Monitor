@@ -16,7 +16,7 @@ Class AnimeTorrentsPlugin : Inherits DynamicPlugin
     ReadOnly headless As Boolean = False
     ReadOnly additionalArgs As String() = Array.Empty(Of String)
 
-    ReadOnly registrationTriggers As String() = {"Registration Closed"}
+    ReadOnly registrationTriggers As String() = {"Closed"}
     ReadOnly registrationTriggersIndicatesOpen As Boolean = False
 
     ReadOnly waitForDomIdle As Boolean = True

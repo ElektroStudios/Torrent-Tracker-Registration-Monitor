@@ -1,6 +1,22 @@
 # MTAFRAT Change Log 📋
 
-## v1.1.11 *(current)* 🆕
+## v1.1.12 *(current)* 🆕
+
+#### 🛠️ Fixes:
+- Fixed a bug that was preventing Selenium from initializing properly.
+
+- Fixed obsolete plugins:
+  - AnimeTorrents (AnimeZ)
+
+  Note that other plugins have NOT been revised in this release; some may still obsolete.
+
+#### 🌟 Improvements:
+- Updated NuGet packages:
+  - Microsoft.CodeAnalysis.VisualBasic
+  - Selenium.Webdriver
+  - System.Management
+
+## v1.1.11 🔄
 
 #### 🛠️ Fixes:
 - The eMuwarez plugin was failing to correctly analyze the registration form.

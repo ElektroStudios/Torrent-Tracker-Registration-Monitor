@@ -62,12 +62,18 @@ Public Module PluginSupport
     <DebuggerStepThrough>
     Public Function CreateChromeDriver(plugin As DynamicPlugin, ByRef refService As ChromeDriverService, headless As Boolean, ParamArray arguments As String()) As ChromeDriver
 
+        SeleniumHelper.InitializeSelenium()
+
+        Dim latestChromeDir As String = SeleniumHelper.GetLatestChromeDirPath
+        Dim latestChromedriverPath As String = SeleniumHelper.GetLatestChromedriverPath
+
         Dim options As New ChromeOptions() With {
             .AcceptInsecureCertificates = True,
             .EnableDownloads = False,
             .LeaveBrowserRunning = False,
             .UnhandledPromptBehavior = UnhandledPromptBehavior.Ignore,
-            .UseStrictFileInteractability = True
+            .UseStrictFileInteractability = True,
+            .BinaryLocation = Path.Combine(latestChromeDir, "chrome.exe")
         }
 
         options.AddAdditionalOption("useAutomationExtension", False)
@@ -122,7 +128,7 @@ Public Module PluginSupport
 
         options.AddArguments(arguments)
 
-        refService = ChromeDriverService.CreateDefaultService()
+        refService = ChromeDriverService.CreateDefaultService(latestChromedriverPath)
         With refService
             .DisableBuildCheck = False
             .EnableAppendLog = False
