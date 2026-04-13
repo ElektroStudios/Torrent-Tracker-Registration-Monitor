@@ -31,7 +31,7 @@ automation
 checker
  -->
 
-# Torrent Tracker Registration Monitor
+# <p align="center">Torrent Tracker Registration Monitor
 # <p align="center">(TTRM)
 
 ------------------
