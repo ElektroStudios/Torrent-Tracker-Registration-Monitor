@@ -2,14 +2,15 @@
 
 ## v1.1.13 *(current)* 🆕
 
-Please note that the application and the GitHub repository has been renamed from “Multi-Tracker and Forums Registration Availability Tool” (MTAFRAT) to “Torrent Tracker Registration Monitor” (TTRM), as the previous name was somewhat too long and confusing. Developers now must use "TTRM" namespace instead of "MTAFRAT".
+> [!IMPORTANT]
+> ### The application and the GitHub repository has been renamed from “Multi-Tracker and Forums Registration Availability Tool” (MTAFRAT) to “Torrent Tracker Registration Monitor” (TTRM), as the previous name was somewhat too long and confusing. Plugin developers now must use "TTRM" namespace instead of "MTAFRAT".
 
 - Updated plugins:
   - AnimeTorrents
   - Lat-Team
   - TorrentLand
 
-- Obsolete plugins, moved to a new "plugins (dead)" folder:
+- Plugins for (apparently) dead websites were moved to a new "plugins (dead)" folder:
   - ParabellumHD
   - Tekno3D
 
