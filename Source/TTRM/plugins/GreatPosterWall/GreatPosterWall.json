@@ -1,0 +1,10 @@
+{
+    "Name": "GreatPosterWall",
+    "Description": "Great Poster Wall (GPW) is a CHINESE Private Torrent Tracker for HD MOVIES.",
+    "UrlLogin": "https://greatposterwall.com/login.php",
+    "UrlRegistration": "https://greatposterwall.com/register.php",
+    "UrlApplication": "",
+    "IconPath": ".\\GreatPosterWall.png",
+    "VbCodeFile": ".\\GreatPosterWall.vb"
+}
+

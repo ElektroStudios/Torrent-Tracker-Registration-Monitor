@@ -1,0 +1,9 @@
+{
+    "Name": "ParabellumHD",
+    "Description": "ParabellumHD is a SPANISH Private Torrent Tracker for MOVIES / TV",
+    "UrlLogin": "https://parabellumhd.cx/login.php",
+    "UrlRegistration": "https://parabellumhd.cx/register.php",
+    "UrlApplication": "https://parabellumhd.cx/apply.php",
+    "IconPath": ".\\ParabellumHD.png",
+    "VbCodeFile": ".\\ParabellumHD.vb"
+}

@@ -1,0 +1,10 @@
+{
+    "Name": "TorrentCFF",
+    "Description": "TorrentCFF is a CHINESE Private Torrent Tracker for HD MOVIES / TV.",
+    "UrlLogin": "https://et8.org/login.php",
+    "UrlRegistration": "https://et8.org/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\TorrentCFF.png",
+    "VbCodeFile": ".\\TorrentCFF.vb"
+}
+

@@ -1,0 +1,10 @@
+{
+    "Name": "BitPorn",
+    "Description": "BitPorn is a private torrent tracker for XXX releases",
+    "UrlLogin": "https://bitporn.eu/login",
+    "UrlRegistration": "https://bitporn.eu/register",
+    "UrlApplication": "https://bitporn.eu/application",
+    "IconPath": ".\\BitPorn.png",
+    "VbCodeFile": ".\\BitPorn.vb"
+}
+

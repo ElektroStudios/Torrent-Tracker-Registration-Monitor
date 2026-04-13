@@ -1,0 +1,10 @@
+{
+    "Name": "NicePT",
+    "Description": "NicePT is a CHINESE Private Torrent Tracker for XXX.",
+    "UrlLogin": "https://www.nicept.net/login.php",
+    "UrlRegistration": "https://www.nicept.net/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\NicePT.png",
+    "VbCodeFile": ".\\NicePT.vb"
+}
+

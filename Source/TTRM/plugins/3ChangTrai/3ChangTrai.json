@@ -1,0 +1,9 @@
+{
+    "Name": "3ChangTrai",
+    "Description": "3ChangTrai (3CT) is a vietnamese private torrent tracker for HD MOVIES / TV / GENERAL",
+    "UrlLogin": "https://3changtrai.com/login.php",
+    "UrlRegistration": "https://3changtrai.com/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\3ChangTrai.png",
+    "VbCodeFile": ".\\3ChangTrai.vb"
+}

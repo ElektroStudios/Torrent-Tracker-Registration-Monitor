@@ -1,0 +1,158 @@
+----------------------------------------------------------------------------------------------------------
+🧩 Torrent Tracker Registration Monitor (TTRM)
+
+Autor: ElektroStudios
+Website: https://github.com/ElektroStudios/Torrent-Tracker-Registration-Monitor
+----------------------------------------------------------------------------------------------------------
+
+TTRM es una herramienta diseñada para comprobar la 
+disponibilidad de registro en múltiples trackers y 
+foros de manera automatizada.
+
+Permite analizar rápidamente el estado de registro 
+mediante un sistema modular basado en plugins 
+que facilitan la integración de nuevos sitios 
+sin modificar el núcleo del programa.
+
+ARCHIVO LÉEME
+_____________
+
+📋 Requisitos
+
+	Este programa requiere de .NET Desktop Runtime 8.0 instalado en su equipo.
+
+	Descargue el paquete de .NET Desktop Runtime 8.0 de 64-Bits aquí:
+		► https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+
+📦 Arquitectura basada en plugins
+
+	El programa funciona mediante un sistema de plugins (complementos).
+
+	Cada plugin está compuesto por tres elementos principales:
+
+		● Archivo JSON
+		    Contiene los metadatos básicos del plugin: 
+		    	nombre, descripción, URL de inicio de sesión o registro, etc.
+
+		● Archivo de imagen PNG, JPG, BMP o ICO
+		    Generalmente se trata de un banner o un favicon 
+		    que representa visualmente al plugin.
+		    Se recomienda que sea una imagen cuadrada (square), 
+		    preferiblemente de 48×48 píxeles.
+
+		● Archivo VB
+		    Contiene el código fuente en VB.NET que implementa la 
+		    lógica y el comportamiento del plugin dentro del programa.
+
+📁 Ubicación de los plugins
+
+	Todos los plugins se encuentran dentro de la carpeta "plugins".
+	Si alguno no le resulta útil y quiere eliminarlo del programa, 
+	puede borrar la carpeta correspondiente al nombre del plugin, 
+	o moverlo a otro directorio fuera de su ubicación.
+
+🔧 Plugins integrados
+
+	Índice Nombre           Url
+	------ ------           ---
+	01    # Site Auto Login
+	02    3ChangTrai        https://3changtrai.com/login.php
+	03    3D Torrents       http://www.3dtorrents.org/index.php?page=login
+	04    4th Dimension     https://4thd.xyz/login.php
+	05    AlphaRatio        https://alpharatio.cc/login.php
+	06    Animebytes        https://animebytes.tv/user/login
+	07    AnimeTorrents     https://animetorrents.me/login.php
+	08    AvistaZ           https://avistaz.to/auth/login
+	09    BeyondHD          https://beyond-hd.me/login
+	10    BitPorn           https://bitporn.eu/login
+	11    Blutopia          https://blutopia.cc/login
+	12    Cinemageddon      https://cinemageddon.net/login.php
+	13    CinemaZ           https://cinemaz.to/auth/login
+	14    DarkPeers         https://darkpeers.org/login
+	15    Digital Core      https://digitalcore.club/login
+	16    Elite-HD          https://www.elitehd.li/ucp.php?mode=login
+	17    eMuwarez          https://emuwarez.com/login
+	18    ExoticaZ          https://exoticaz.to/login
+	19    Fappaizuri        https://fappaizuri.me/account-login.php
+	20    FearNoPeer        https://fearnopeer.com/login
+	21    Femdomcult        https://femdomcult.org/login
+	22    GazelleGames      https://gazellegames.net/login.php
+	23    GreatPosterWall   https://greatposterwall.com/login.php
+	24    HD Dolby          https://www.hddolby.com/login.php
+	25    HD-Forever        https://hdf.world/login.php
+	26    HD-Olimpo         https://hd-olimpo.club/login
+	27    HD-Space          https://hd-space.org/index.php?page=login
+	28    HD-Zero           https://www.hdzero.org/login
+	29    HDHome            https://hdhome.org/login.php
+	30    HDTime            https://hdtime.org/login.php
+	31    Hebits            https://hebits.net/login.php
+	32    iPtorrents        https://www.iptorrents.com/login.php
+	33    Kleverig          https://www.kleverig.eu/login.php?do=login
+	34    KrazyZone         https://krazyzone.net/account-login.php
+	35    Lat-Team          https://lat-team.com/login
+	36    Locadora          https://locadora.cc/login
+	37    LST               https://lst.gg/login
+	38    More Than TV      https://www.morethantv.me/login
+	39    NicePT            https://www.nicept.net/login.php
+	40    Old Toons World   https://oldtoons.world/login
+	41    OnlyEncodes       https://onlyencodes.cc/login
+	42    ParabellumHD      https://parabellumhd.cx/login.php
+	43    PassThePopcorn    https://passthepopcorn.me/login.php
+	44    PrivateHD         https://privatehd.to/auth/login
+	45    Punto Torrent     https://xbt.puntotorrent.com/index.php?page=login
+	46    Rastastugan       https://rastastugan.org/login
+	47    ReelFlix          https://reelflix.cc/login
+	48    SceneRush         https://www.scene-rush.com/login.php
+	49    SeedFile          https://seedfile.io/home
+	50    SportsCult        https://sportscult.org/index.php?page=login
+	51    Superbits         https://login.superbits.org/login
+	52    Tekno3D           https://tracker.tekno3d.com/login.php
+	53    TorrentCFF        https://et8.org/login.php
+	54    Torrent Day       https://www.torrentday.me/login.php
+	55    Torrenteros       https://torrenteros.org/login
+	56    TorrentLand       https://torrentland.li/login
+	57    TorrentLeech      https://www.torrentleech.org/
+	58    Upscale Vault     https://upscalevault.com/login
+	59    xBytesv2          https://xbytesv2.li/login
+
+💡 Consejos
+
+	1.  Algunos de los sitios web pueden mantener abierto el registro 
+		durante varios días o incluso semanas y meses. Sin embargo 
+		—y según la información recopilada y comentarios de usuarios— 
+		otros sitios solo habilitan el registro durante períodos muy breves, 
+		a veces menos de 24 horas, y entre ellos, sitios españoles como Torrentland.
+
+		Por ese motivo, si no quiere perder la oportunidad de registrarse a tiempo, 
+		se recomienda encarecidamente configurar la ejecución automática cada hora.
+		De esta forma, TTRM podrá detectar con fiabilidad 
+		periodos muy cortos de apertura de registro en un sitio web.
+
+	2.  Si activa la éjecución en paralelo, los plugins se ejecutarán de cuatro en cuatro,
+		significando abrir cuatro instancias del proceso chromedriver.exe (y sus respectivos 
+		procesos hijos de Chrome.exe) al mismo tiempo. Esto acortará en gran medida el 
+		tiempo total necesario para terminar de ejecutar todos los plugins, sin embargo, 
+		también podría ocasionar problemas inesperados en la aplicación. Es experimental.
+		
+	3.  Si activa la éjecución automática de plugins, se recomienda seleccionar
+		solamente aquellos plugins que realmente le interesen. A veces un sitio web
+		puede estar caído o provocar un error inesperado que prolongue en exceso
+		el tiempo total de ejecución.
+
+	4.  Cada vez que ejecute un plugin, TTRM generará ciertos archivos en el disco 
+		de forma automática. Esto es la caché de la aplicación. Si desea borrar la caché, 
+		simplemente pulse el botón "Borrar caché" en las opciones del programa.
+
+	5.  La primera vez que ejecute un plugin que interactúe con un sitio web protegido 
+		por Cloudflare ("AvistaZ", "CinemaZ", "ExoticaZ", etc), puede fallar 
+		el desafío de Cloudflare, sin embargo, las siguientes veces no debería fallar.
+		Tenga en cuenta que, si borra la caché del programa, la próxima vez que
+		ejecute el plugin será como si fuese la primera vez que lo hace. 
+
+	6.  Si por cualquier motivo TTRM registrase errores extraños relacionados con Chrome
+		al ejecutar un plugin, pruebe a cerrar todos los procesos que haya en ejecución 
+		con los siguientes nombres: "Chrome.exe" y "ChromeDriver.exe". Esto lo puede hacer
+		de manera sencilla con el siguiente comando en la CMD de Windows:
+			Taskkill /F /T /IM "Chrome.exe" /IM "ChromeDriver.exe"
+		Una vez que los procesos en ejecución hayan sido cerrados, 
+		abra TTRM y vuelva a intentar ejecutar el plugin.

@@ -31,8 +31,8 @@ automation
 checker
  -->
 
-# Multi-Tracker and Forums Registration Availability Tool
-# <p align="center">(MTAFRAT)
+# Torrent Tracker Registration Monitor
+# <p align="center">(TTRM)
 
 ------------------
 
@@ -40,7 +40,7 @@ checker
 
 Ever wanted to join your favorite private torrent tracker or forum but got tired of waiting for open registration? Well, this program will not do magic — but it will help you take the edge off that frustrating wait...
 
-**MTAFRAT** is a tool designed to quickly and automatically check registration availability status across multiple trackers and forums using a modular, plugin-based system.
+**TTRM** is a tool designed to quickly and automatically check account registration availability status across multiple torrent trackers and forums using a modular, plugin-based system.
 
 ## 👌 Features
 
@@ -111,7 +111,6 @@ All plugins are located in the `plugins` folder. If you don't find one of them u
 - NicePT
 - Old Toons World
 - OnlyEncodes
-- ParabellumHD
 - PassThePopcorn
 - PrivateHD
 - Punto Torrent
@@ -121,7 +120,6 @@ All plugins are located in the `plugins` folder. If you don't find one of them u
 - SeedFile
 - SportsCult
 - Superbits
-- Tekno3D
 - TorrentCFF
 - Torrent Day
 - Torrenteros
@@ -145,17 +143,17 @@ All plugins are located in the `plugins` folder. If you don't find one of them u
 
 ## 🤖 Getting Started (common users)
 
-Download the latest build by clicking [here](https://github.com/ElektroStudios/MTAFRAT-Multi_Tracker_and_Forums_Registration_Availability_Tool/releases/latest).
+Download the latest build by clicking [here](https://github.com/ElektroStudios/Torrent-Tracker-Registration-Monitor/releases/latest).
 
 And simply run the program to get started. It features an intuitive, user-friendly interface.
 
 💡 Also remember to read the included `README.txt` file located in the `docs` folder for more details and also tips for using the application. 
-   Or click [here](https://raw.githubusercontent.com/ElektroStudios/MTAFRAT-Multi_Tracker_and_Forums_Registration_Availability_Tool/main/Source/MTAFRAT/docs/english/README.txt) to read the document now.
+   Or click [here](https://raw.githubusercontent.com/ElektroStudios/Torrent-Tracker-Registration-Monitor/main/Source/TTRM/docs/english/README.txt) to read the document now.
 
 ## 🤖 Getting Started (plugin developers)
 
 Read the included `README (for programmers).md` file located in the `docs` folder for more details. 
-Or click [here](https://github.com/ElektroStudios/MTAFRAT-Multi_Tracker_and_Forums_Registration_Availability_Tool/tree/main/Source/MTAFRAT/docs/english/README%20%28for%20programmers%29.md) to read the document now.
+Or click [here](https://github.com/ElektroStudios/Torrent-Tracker-Registration-Monitor/tree/main/Source/TTRM/docs/english/README%20%28for%20programmers%29.md) to read the document now.
 
 ## 🔄 Change Log
 
@@ -178,7 +176,7 @@ This Work has no affiliation, approval or endorsement by the author(s) of the th
 
 ## 💪 Contributing
 
-Your contribution is highly appreciated!. If you have any ideas, suggestions, or encounter issues, feel free to open an issue by clicking [here](https://github.com/ElektroStudios/MTAFRAT-Multi_Tracker_and_Forums_Registration_Availability_Tool/issues/new/choose). 
+Your contribution is highly appreciated!. If you have any ideas, suggestions, or encounter issues, feel free to open an issue by clicking [here](https://github.com/ElektroStudios/Torrent-Tracker-Registration-Monitor/issues/new/choose). 
 
 Your input helps make this Work better for everyone. Thank you for your support! 🚀
 

@@ -1,0 +1,10 @@
+{
+    "Name": "Cinemageddon",
+    "Description": "Cinemageddon is a private torrent tracker for MOVIES / TV.",
+    "UrlLogin": "https://cinemageddon.net/login.php",
+    "UrlRegistration": "https://cinemageddon.net/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\Cinemageddon.png",
+    "VbCodeFile": ".\\Cinemageddon.vb"
+}
+

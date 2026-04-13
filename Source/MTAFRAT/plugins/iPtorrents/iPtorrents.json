@@ -1,9 +1,0 @@
-{
-    "Name": "iPtorrents",
-    "Description": "IPTorrents (IPT) is a Private Torrent Tracker for 0DAY / GENERAL",
-    "UrlLogin": "https://www.iptorrents.com/login.php",
-    "UrlRegistration": "https://www.iptorrents.com/signup.php",
-    "UrlApplication": "",
-    "IconPath": ".\\iPtorrents.png",
-    "VbCodeFile": ".\\iPtorrents.vb"
-}

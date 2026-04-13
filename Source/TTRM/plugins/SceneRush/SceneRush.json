@@ -1,0 +1,10 @@
+{
+    "Name": "SceneRush",
+    "Description": "SceneRush is a PORTUGUESE Private Torrent Tracker for 0DAY / GENERAL.",
+    "UrlLogin": "https://www.scene-rush.com/login.php",
+    "UrlRegistration": "https://www.scene-rush.com/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\SceneRush.png",
+    "VbCodeFile": ".\\SceneRush.vb"
+}
+

@@ -1,0 +1,10 @@
+{
+    "Name": "HD Dolby",
+    "Description": "HD Dolby is a CHINESE Private Torrent Tracker for HD MOVIES / TV.",
+    "UrlLogin": "https://www.hddolby.com/login.php",
+    "UrlRegistration": "https://www.hddolby.com/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\HDDolby.png",
+    "VbCodeFile": ".\\HDDolby.vb"
+}
+

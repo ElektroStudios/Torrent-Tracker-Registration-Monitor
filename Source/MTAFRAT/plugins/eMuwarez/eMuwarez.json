@@ -1,9 +1,0 @@
-{
-    "Name": "eMuwarez",
-    "Description": "eMuwarez is a spanish private torrent tracker for HD MOVIES / TV / GENERAL",
-    "UrlLogin": "https://emuwarez.com/login",
-    "UrlRegistration": "https://emuwarez.com/register",
-    "UrlApplication": "https://emuwarez.com/application",
-    "IconPath": ".\\eMuwarez.png",
-    "VbCodeFile": ".\\eMuwarez.vb"
-}

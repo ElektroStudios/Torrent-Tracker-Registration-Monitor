@@ -1,0 +1,10 @@
+{
+    "Name": "Locadora",
+    "Description": "LOCADORA is a BRAZILIAN Private Torrent Tracker for HD MOVIES / TV.",
+    "UrlLogin": "https://locadora.cc/login",
+    "UrlRegistration": "https://locadora.cc/register",
+    "UrlApplication": "https://locadora.cc/application",
+    "IconPath": ".\\Locadora.png",
+    "VbCodeFile": ".\\Locadora.vb"
+}
+

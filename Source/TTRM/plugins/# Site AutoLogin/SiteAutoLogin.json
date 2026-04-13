@@ -1,0 +1,9 @@
+{
+    "Name": "# Site Auto Login",
+    "Description": "This plugin automatically handles the login procedure for hardcoded websites in the plugin's source-code. It streamlines access, saves time, and removes the need to manually enter usernames and passwords.",
+    "UrlLogin": "",
+    "UrlRegistration": "",
+    "UrlApplication": "",
+    "IconPath": ".\\SiteAutoLogin.png",
+    "VbCodeFile": ".\\SiteAutoLogin.vb"
+}

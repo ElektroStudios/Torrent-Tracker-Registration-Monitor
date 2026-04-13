@@ -1,6 +1,26 @@
-# MTAFRAT Change Log 📋
+# TTRM Change Log 📋
 
-## v1.1.12 *(current)* 🆕
+## v1.1.13 *(current)* 🆕
+
+Please note that the application and the GitHub repository has been renamed from “Multi-Tracker and Forums Registration Availability Tool” (MTAFRAT) to “Torrent Tracker Registration Monitor” (TTRM), as the previous name was somewhat too long and confusing. Developers now must use "TTRM" namespace instead of "MTAFRAT".
+
+- Updated plugins:
+  - AnimeTorrents
+  - Lat-Team
+  - TorrentLand
+
+- Obsolete plugins, moved to a new "plugins (dead)" folder:
+  - ParabellumHD
+  - Tekno3D
+
+- Updated NuGet packages:
+  - Selenium.Webdriver
+  - System.Management
+
+#### 🛠️ Improvements:
+- Refactored the approach used to evaluate strings in registration and application forms, eliminating false positives caused by variations such as accented vowels.
+
+## v1.1.12 🔄
 
 #### 🛠️ Fixes:
 - Fixed a bug that was preventing Selenium from initializing properly.

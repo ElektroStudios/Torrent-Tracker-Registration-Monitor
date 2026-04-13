@@ -1,0 +1,10 @@
+{
+    "Name": "KrazyZone",
+    "Description": "KrazyZone is a  Private Torrent Tracker for MOVIES / TV / GENERAL.",
+    "UrlLogin": "https://krazyzone.net/account-login.php",
+    "UrlRegistration": "https://krazyzone.net/account-signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\KrazyZone.png",
+    "VbCodeFile": ".\\KrazyZone.vb"
+}
+

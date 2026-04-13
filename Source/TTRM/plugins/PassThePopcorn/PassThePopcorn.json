@@ -1,0 +1,10 @@
+{
+    "Name": "PassThePopcorn",
+    "Description": "PassThePopcorn (PTP) is a private torrent tracker for HD MOVIES / TV",
+    "UrlLogin": "https://passthepopcorn.me/login.php",
+    "UrlRegistration": "https://passthepopcorn.me/register.php",
+    "UrlApplication": "",
+    "IconPath": ".\\PassThePopcorn.png",
+    "VbCodeFile": ".\\PassThePopcorn.vb"
+}
+

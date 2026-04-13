@@ -1,0 +1,9 @@
+{
+    "Name": "4th Dimension",
+    "Description": "4th Dimension is a private torrent tracker for MOVIES / TV / GENERAL.",
+    "UrlLogin": "https://4thd.xyz/login.php",
+    "UrlRegistration": "https://4thd.xyz/register.php",
+    "UrlApplication": "",
+    "IconPath": ".\\4th Dimension.png",
+    "VbCodeFile": ".\\4th Dimension.vb"
+}

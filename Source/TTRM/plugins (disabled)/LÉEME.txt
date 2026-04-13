@@ -1,0 +1,1 @@
+Directorio para colocar dentro plugins que ya no desees utilizar.

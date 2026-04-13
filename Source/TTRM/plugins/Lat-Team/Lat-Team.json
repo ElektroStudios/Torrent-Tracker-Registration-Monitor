@@ -1,0 +1,10 @@
+{
+    "Name": "Lat-Team",
+    "Description": "Lat-Team is a SPANISH Private Torrent Tracker for MOVIES / TV.",
+    "UrlLogin": "https://lat-team.com/login",
+    "UrlRegistration": "https://lat-team.com/register",
+    "UrlApplication": "https://lat-team.com/application",
+    "IconPath": ".\\Lat-Team.png",
+    "VbCodeFile": ".\\Lat-Team.vb"
+}
+

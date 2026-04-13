@@ -1,0 +1,10 @@
+{
+    "Name": "HD-Zero",
+    "Description": "HD-Zero is a Private Torrent Tracker for HD MOVIES / TV.",
+    "UrlLogin": "https://www.hdzero.org/login",
+    "UrlRegistration": "https://www.hdzero.org/register",
+    "UrlApplication": "https://www.hdzero.org/application",
+    "IconPath": ".\\HDZero.png",
+    "VbCodeFile": ".\\HDZero.vb"
+}
+

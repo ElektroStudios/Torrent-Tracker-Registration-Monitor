@@ -1,9 +1,0 @@
-{
-    "Name": "3D Torrents",
-    "Description": "3DTorrents (3DT) is a private torrent tracker that wants to be heaven on earth for 3D movies.",
-    "UrlLogin": "http://www.3dtorrents.org/index.php?page=login",
-    "UrlRegistration": "http://www.3dtorrents.org/index.php?page=signup",
-    "UrlApplication": "",
-    "IconPath": ".\\3D Torrents.png",
-    "VbCodeFile": ".\\3D Torrents.vb"
-}

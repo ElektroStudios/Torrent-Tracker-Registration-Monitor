@@ -1,1 +1,0 @@
-Placeholder to put inside the plugins you don't want anymore.

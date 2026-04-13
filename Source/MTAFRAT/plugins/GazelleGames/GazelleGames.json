@@ -1,9 +1,0 @@
-{
-    "Name": "GazelleGames",
-    "Description": "GazelleGames (GGn) is a private torrent tracker for pirated video games.",
-    "UrlLogin": "https://gazellegames.net/login.php",
-    "UrlRegistration": "https://gazellegames.net/register.php",
-    "UrlApplication": "",
-    "IconPath": ".\\GazelleGames.png",
-    "VbCodeFile": ".\\GazelleGames.vb"
-}

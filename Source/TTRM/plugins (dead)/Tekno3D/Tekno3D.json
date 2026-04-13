@@ -1,0 +1,10 @@
+{
+    "Name": "Tekno3D",
+    "Description": "TEKNO3D is a Private Torrent Tracker for UHD MOVIES / TV.",
+    "UrlLogin": "https://tracker.tekno3d.com/login.php",
+    "UrlRegistration": "https://tracker.tekno3d.com/signup.php",
+    "UrlApplication": "",
+    "IconPath": ".\\Tekno3D.png",
+    "VbCodeFile": ".\\Tekno3D.vb"
+}
+

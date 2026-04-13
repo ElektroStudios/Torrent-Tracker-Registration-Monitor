@@ -1,9 +1,0 @@
-{
-    "Name": "AvistaZ",
-    "Description": "AvistaZ is a tracker for Asian contents except asian porn. Only media produced in South, Southeast, East Asian countries like Korean, Japanese, Chinese, Filipino, Thai, India are allowed here.",
-    "UrlLogin": "https://avistaz.to/auth/login",
-    "UrlRegistration": "https://avistaz.to/auth/register",
-    "UrlApplication": "",
-    "IconPath": ".\\AvistaZ.png",
-    "VbCodeFile": ".\\AvistaZ.vb"
-}

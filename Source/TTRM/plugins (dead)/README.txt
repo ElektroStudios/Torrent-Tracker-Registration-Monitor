@@ -1,0 +1,1 @@
+Placeholder to put inside plugins for dead websites.

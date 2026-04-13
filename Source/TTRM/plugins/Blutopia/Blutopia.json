@@ -1,0 +1,10 @@
+{
+    "Name": "Blutopia",
+    "Description": "Blutopia (BLU) is a Private Torrent Tracker for HD MOVIES / TV.",
+    "UrlLogin": "https://blutopia.cc/login",
+    "UrlRegistration": "https://blutopia.cc/register",
+    "UrlApplication": "https://blutopia.cc/application",
+    "IconPath": ".\\Blutopia.png",
+    "VbCodeFile": ".\\Blutopia.vb"
+}
+

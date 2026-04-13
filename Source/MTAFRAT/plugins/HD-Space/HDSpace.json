@@ -1,9 +1,0 @@
-{
-    "Name": "HD-Space",
-    "Description": "HD-Space (HDS) is a Private Torrent Tracker for HD MOVIES / TV.",
-    "UrlLogin": "https://hd-space.org/index.php?page=login",
-    "UrlRegistration": "https://hd-space.org/index.php?page=signup",
-    "UrlApplication": "",
-    "IconPath": ".\\HDSpace.png",
-    "VbCodeFile": ".\\HDSpace.vb"
-}

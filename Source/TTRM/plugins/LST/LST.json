@@ -1,0 +1,10 @@
+{
+    "Name": "LST",
+    "Description": "LST (LOST) is a private torrent tracker for HD MOVIES / TV / GENERAL",
+    "UrlLogin": "https://lst.gg/login",
+    "UrlRegistration": "https://lst.gg/register",
+    "UrlApplication": "https://lst.gg/application",
+    "IconPath": ".\\LST.png",
+    "VbCodeFile": ".\\LST.vb"
+}
+
