@@ -18,8 +18,8 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Product>Torrent Tracker Registration Monitor</Product>
     <UseApplicationFramework>true</UseApplicationFramework>
-    <AssemblyVersion>1.1.13</AssemblyVersion>
-    <FileVersion>1.1.13</FileVersion>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
     <RepositoryUrl>https://github.com/ElektroStudios/Torrent-Tracker-Registration-Monitor</RepositoryUrl>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>

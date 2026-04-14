@@ -1,5 +1,6 @@
 Imports System
 Imports System.Diagnostics
+Imports System.Drawing
 Imports System.Threading
 Imports System.Threading.Tasks
 Imports System.Windows.Forms
@@ -39,13 +40,13 @@ Class GreatPosterWallPlugin : Inherits DynamicPlugin
                                    )
 
                     Catch ex As Exception
-                        PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", ex.Message)
+                        PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, ex.Message)
                         ' PluginSupport.NotifyMessageFormat("Error", MessageBoxIcon.Error, "StatusMsg_ExceptionFormat", ex.Message)
 
                     Finally
                         driver?.Quit()
-                        PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted")
-                        PluginSupport.PrintMessage(Me, String.Empty)
+                        PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted", Color.LimeGreen)
+                        PluginSupport.PrintMessage(Me, String.Empty, Color.Empty)
                     End Try
                 End Using
 

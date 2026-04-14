@@ -2,6 +2,7 @@ Imports System
 Imports System.Collections.Generic
 Imports System.Collections.ObjectModel
 Imports System.Diagnostics
+Imports System.Drawing
 Imports System.Globalization
 Imports System.Runtime.CompilerServices
 Imports System.Threading
@@ -95,56 +96,56 @@ Class SiteAutoLogin : Inherits DynamicPlugin
               driver As ChromeDriver = PluginSupport.CreateChromeDriver(Me, service, Me.headless, Me.additionalArgs)
 
             Try
-                PluginSupport.LogMessageFormat(Me, "StatusMsg_ConnectingFormat", siteconfig.SiteName)
-                PluginSupport.LogMessage(Me, $"➜ {siteconfig.LoginURL}")
+                PluginSupport.LogMessageFormat(Me, "StatusMsg_ConnectingFormat", Color.Empty, siteconfig.SiteName)
+                PluginSupport.LogMessage(Me, $"➜ {siteconfig.LoginURL}", Color.Empty)
                 PluginSupport.NavigateTo(driver, siteconfig.LoginURL)
-                PluginSupport.LogMessage(Me, "StatusMsg_WaitingForPageLoad")
+                PluginSupport.LogMessage(Me, "StatusMsg_WaitingForPageLoad", Color.Empty)
                 PluginSupport.WaitForPageReady(driver,
                                                afterPageReadyDelay:=TimeSpan.FromSeconds(1),
                                                waitForDomIdle:=True, timeout:=TimeSpan.FromSeconds(30))
 
                 If driver.Url.Equals(siteconfig.PostLoginURL, StringComparison.InvariantCultureIgnoreCase) OrElse
                   (driver.Url.Equals(siteconfig.MainURL, StringComparison.InvariantCultureIgnoreCase)) Then
-                    PluginSupport.LogMessage(Me, Me.Messages(currentLangName)("SessionStillActive"))
+                    PluginSupport.LogMessage(Me, Me.Messages(CurrentLangName)("SessionStillActive"), Color.Empty)
                     Return RegistrationFlags.Null
                 End If
-                PluginSupport.LogMessage(Me, "StatusMsg_LoginPageLoaded")
+                PluginSupport.LogMessage(Me, "StatusMsg_LoginPageLoaded", Color.Empty)
 
                 ' Username field
                 Dim userField As IWebElement = PluginSupport.WaitForElement(driver, By.CssSelector(siteconfig.UsernameCSSSelector))
                 If userField Is Nothing Then
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("UsernameElementNotfound"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(CurrentLangName)("UsernameElementNotfound"))
                 End If
-                PluginSupport.LogMessage(Me, Me.Messages(currentLangName)("FillingUserNameField"))
+                PluginSupport.LogMessage(Me, Me.Messages(CurrentLangName)("FillingUserNameField"), Color.Empty)
                 userField.Clear()
                 userField.SendKeys(siteconfig.Username)
 
                 ' Password field
                 Dim passField As IWebElement = PluginSupport.WaitForElement(driver, By.CssSelector(siteconfig.PasswordCSSSelector))
                 If passField Is Nothing Then
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("PasswordElementNotfound"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(CurrentLangName)("PasswordElementNotfound"))
                 End If
-                PluginSupport.LogMessage(Me, Me.Messages(currentLangName)("FillingPasswordField"))
+                PluginSupport.LogMessage(Me, Me.Messages(CurrentLangName)("FillingPasswordField"), Color.Empty)
                 passField.Clear()
                 passField.SendKeys(siteconfig.Password)
 
                 ' Submit button
                 Dim submitButton As IWebElement = SiteAutoLogin.FindSubmitButton(siteconfig, driver)
                 If submitButton IsNot Nothing Then
-                    PluginSupport.LogMessage(Me, Me.Messages(currentLangName)("Submitting"))
+                    PluginSupport.LogMessage(Me, Me.Messages(CurrentLangName)("Submitting"), Color.Empty)
                     Me.DoLoginFormSubmit(driver, submitButton, siteconfig, currentLangName)
                 Else
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("SubmitElementNotfound"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(CurrentLangName)("SubmitElementNotfound"))
                 End If
 
             Catch ex As Exception
-                PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", ex.Message)
+                PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, ex.Message)
                 ' PluginSupport.NotifyMessageFormat("Error", MessageBoxIcon.Error, "StatusMsg_ExceptionFormat", ex.Message)
 
             Finally
                 driver?.Quit()
-                PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted")
-                PluginSupport.PrintMessage(Me, String.Empty)
+                PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted", Color.LimeGreen)
+                PluginSupport.PrintMessage(Me, String.Empty, Color.Empty)
             End Try
         End Using
 
@@ -184,9 +185,9 @@ Class SiteAutoLogin : Inherits DynamicPlugin
         Do
             If (driver.Url <> currentUrl) Then
                 If driver.Url.Equals(siteConfig.PostLoginURL, StringComparison.InvariantCultureIgnoreCase) Then
-                    PluginSupport.LogMessage(Me, Me.Messages(currentLangName)("LoginSuccess"))
+                    PluginSupport.LogMessage(Me, Me.Messages(currentLangName)("LoginSuccess"), Color.Empty)
                 Else
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("LoginFailed_UnexpectedRedirectedUrl"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(currentLangName)("LoginFailed_UnexpectedRedirectedUrl"))
                 End If
 
                 Exit Do
@@ -194,9 +195,9 @@ Class SiteAutoLogin : Inherits DynamicPlugin
 
             If sw.Elapsed.TotalSeconds > timeoutSeconds Then
                 If driver.Url.Equals(siteConfig.LoginURL, StringComparison.InvariantCultureIgnoreCase) Then
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("LoginFailed_StillInLoginUrl"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(currentLangName)("LoginFailed_StillInLoginUrl"))
                 Else
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("LoginFailed_Timeout"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(currentLangName)("LoginFailed_Timeout"))
                 End If
 
                 Exit Do
@@ -281,7 +282,7 @@ Class SiteAutoLogin : Inherits DynamicPlugin
             Function()
                 Dim sites As ReadOnlyCollection(Of SiteLoginConfig) = SiteAutoLogin.GetSiteLoginConfigs()
                 If sites.Count = 0 Then
-                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Me.Messages(currentLangName)("NoSiteLoginConfs"))
+                    PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, Me.Messages(CurrentLangName)("NoSiteLoginConfs"))
                 Else
                     For Each site As SiteLoginConfig In sites
                         regFlags = regFlags Or Me.LoginToSite(site)

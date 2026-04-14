@@ -403,10 +403,16 @@ Public Module PluginSupport
     ''' This can be either a plain string or a key from the application resource file (<c>TTRM.Strings</c>) 
     ''' to automatically retrieve the localized text according to the current UI culture.
     ''' </param>
+    ''' 
+    ''' <param name="color">
+    ''' The foreground color for the message text. 
+    ''' <para></para>
+    ''' This value can be null (<see cref="Color.Empty"/>).
+    ''' </param>
     <DebuggerStepThrough>
-    Public Sub LogMessage(plugin As DynamicPlugin, msg As String)
+    Public Sub LogMessage(plugin As DynamicPlugin, msg As String, color As Color)
 
-        UIHelper.AppendLineWithTimestamp(plugin.LogTextBox, ResolveLocalizedString(msg), addNewLine:=True)
+        UIHelper.AppendLineWithTimestamp(plugin.LogTextBox, ResolveLocalizedString(msg), color, addNewLine:=True)
     End Sub
 
     ''' <summary>
@@ -424,13 +430,19 @@ Public Module PluginSupport
     ''' to automatically retrieve the localized text according to the current UI culture.
     ''' </param>
     ''' 
+    ''' <param name="color">
+    ''' The foreground color for the message text. 
+    ''' <para></para>
+    ''' This value can be null (<see cref="Color.Empty"/>).
+    ''' </param>
+    ''' 
     ''' <param name="args">
     ''' An array of objects to format according to <paramref name="msgFormat"/>.
     ''' </param>
     <DebuggerStepThrough>
-    Public Sub LogMessageFormat(plugin As DynamicPlugin, msgFormat As String, ParamArray args As Object())
+    Public Sub LogMessageFormat(plugin As DynamicPlugin, msgFormat As String, color As Color, ParamArray args As Object())
 
-        UIHelper.AppendLineWithTimestamp(plugin.LogTextBox, ResolveLocalizedString(msgFormat, args), addNewLine:=True)
+        UIHelper.AppendLineWithTimestamp(plugin.LogTextBox, ResolveLocalizedString(msgFormat, args), color, addNewLine:=True)
     End Sub
 
     ''' <summary>
@@ -447,10 +459,16 @@ Public Module PluginSupport
     ''' This can be either a plain string or a key from the application resource file (<c>TTRM.Strings</c>) 
     ''' to automatically retrieve the localized text according to the current UI culture.
     ''' </param>
+    ''' 
+    ''' <param name="color">
+    ''' The foreground color for the message text. 
+    ''' <para></para>
+    ''' This value can be null (<see cref="Color.Empty"/>).
+    ''' </param>
     <DebuggerStepThrough>
-    Public Sub PrintMessage(plugin As DynamicPlugin, msg As String)
+    Public Sub PrintMessage(plugin As DynamicPlugin, msg As String, color As Color)
 
-        UIHelper.AppendLine(plugin.LogTextBox, ResolveLocalizedString(msg), addNewLine:=True)
+        UIHelper.AppendLine(plugin.LogTextBox, ResolveLocalizedString(msg), color, addNewLine:=True)
     End Sub
 
     ''' <summary>
@@ -468,13 +486,19 @@ Public Module PluginSupport
     ''' to automatically retrieve the localized text according to the current UI culture.
     ''' </param>
     ''' 
+    ''' <param name="color">
+    ''' The foreground color for the message text. 
+    ''' <para></para>
+    ''' This value can be null (<see cref="Color.Empty"/>).
+    ''' </param>
+    ''' 
     ''' <param name="args">
     ''' An array of objects to format according to <paramref name="msgFormat"/>.
     ''' </param>
     <DebuggerStepThrough>
-    Public Sub PrintMessageFormat(plugin As DynamicPlugin, msgFormat As String, ParamArray args As Object())
+    Public Sub PrintMessageFormat(plugin As DynamicPlugin, msgFormat As String, color As Color, ParamArray args As Object())
 
-        UIHelper.AppendLine(plugin.LogTextBox, ResolveLocalizedString(msgFormat, args), addNewLine:=True)
+        UIHelper.AppendLine(plugin.LogTextBox, ResolveLocalizedString(msgFormat, args), color, addNewLine:=True)
     End Sub
 
     ''' <summary>
@@ -622,21 +646,21 @@ Public Module PluginSupport
 
         Dim pluginUrl As String = plugin.UrlRegistration
 
-        PluginSupport.LogMessageFormat(plugin, "StatusMsg_ConnectingFormat", plugin.Name)
-        PluginSupport.LogMessage(plugin, $"➜ {pluginUrl}")
+        PluginSupport.LogMessageFormat(plugin, "StatusMsg_ConnectingFormat", Color.Empty, plugin.Name)
+        PluginSupport.LogMessage(plugin, $"➜ {pluginUrl}", Color.Empty)
         PluginSupport.NavigateTo(driver, pluginUrl)
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_VerifyingPageLoadRequirements")
+        PluginSupport.LogMessage(plugin, "StatusMsg_VerifyingPageLoadRequirements", Color.Empty)
         If PluginSupport.IsCloudflareChallengeRequired(pluginUrl) Then
             PluginSupport.WaitToCompleteCloudflareChallenge(plugin, driver, timeout:=30000)
         End If
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_WaitingForPageLoad")
+        PluginSupport.LogMessage(plugin, "StatusMsg_WaitingForPageLoad", Color.Empty)
         PluginSupport.WaitForPageReady(driver, afterPageReadyDelay, waitForDomIdle, timeout)
         If Not driver.Url.Equals(pluginUrl, StringComparison.InvariantCultureIgnoreCase) Then
             Throw New Exception(My.Resources.Strings.CurrentBrowserUrlDiffersFromPluginUrl & $" ({pluginUrl} ➜ {driver.Url})")
         End If
-        PluginSupport.LogMessage(plugin, "StatusMsg_RegisterPageLoaded")
+        PluginSupport.LogMessage(plugin, "StatusMsg_RegisterPageLoaded", Color.Empty)
 
         Return PluginSupport.EvaluateRegistrationFormState(plugin, driver, triggers, triggersIndicatesOpen)
     End Function
@@ -704,21 +728,21 @@ Public Module PluginSupport
 
         Dim pluginUrl As String = plugin.UrlApplication
 
-        PluginSupport.LogMessageFormat(plugin, "StatusMsg_ConnectingFormat", plugin.Name)
-        PluginSupport.LogMessage(plugin, $"➜ {pluginUrl}")
+        PluginSupport.LogMessageFormat(plugin, "StatusMsg_ConnectingFormat", Color.Empty, plugin.Name)
+        PluginSupport.LogMessage(plugin, $"➜ {pluginUrl}", Color.Empty)
         PluginSupport.NavigateTo(driver, pluginUrl)
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_VerifyingPageLoadRequirements")
+        PluginSupport.LogMessage(plugin, "StatusMsg_VerifyingPageLoadRequirements", Color.Empty)
         If PluginSupport.IsCloudflareChallengeRequired(pluginUrl) Then
             PluginSupport.WaitToCompleteCloudflareChallenge(plugin, driver, timeout:=30000)
         End If
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_WaitingForPageLoad")
+        PluginSupport.LogMessage(plugin, "StatusMsg_WaitingForPageLoad", Color.Empty)
         PluginSupport.WaitForPageReady(driver, afterPageReadyDelay, waitForDomIdle, timeout)
         If Not driver.Url.Equals(pluginUrl, StringComparison.InvariantCultureIgnoreCase) Then
             Throw New Exception(My.Resources.Strings.CurrentBrowserUrlDiffersFromPluginUrl & $" ({pluginUrl} ➜ {driver.Url})")
         End If
-        PluginSupport.LogMessage(plugin, "StatusMsg_ApplicationPageLoaded")
+        PluginSupport.LogMessage(plugin, "StatusMsg_ApplicationPageLoaded", Color.Empty)
 
         Return PluginSupport.EvaluateApplicationFormState(plugin, driver, triggers, triggersIndicatesOpen)
     End Function
@@ -755,10 +779,10 @@ Public Module PluginSupport
                                                   triggers As String(),
                                                   triggersIndicatesOpen As Boolean) As RegistrationFlags
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_AnalyzingPageContent")
+        PluginSupport.LogMessage(plugin, "StatusMsg_AnalyzingPageContent", Color.Empty)
 
         If (triggers Is Nothing) OrElse (triggers.Length = 0) Then
-            PluginSupport.LogMessage(plugin, "StatusMsg_TriggerRegEmpty")
+            PluginSupport.LogMessage(plugin, "StatusMsg_TriggerRegEmpty", Color.Empty)
             Return RegistrationFlags.RegistrationUnknown
         End If
 
@@ -766,7 +790,7 @@ Public Module PluginSupport
         If String.IsNullOrWhiteSpace(pageSource) OrElse
             pageSource.Trim().Equals("<html><head></head><body></body></html>", StringComparison.OrdinalIgnoreCase) Then
 
-            PluginSupport.LogMessageFormat(plugin, "StatusMsg_PageSourceEmptyFormat", {pageSource})
+            PluginSupport.LogMessageFormat(plugin, "StatusMsg_PageSourceEmptyFormat", Color.IndianRed, {pageSource})
             Return RegistrationFlags.RegistrationUnknown
         End If
 
@@ -783,10 +807,10 @@ Public Module PluginSupport
 
         Select Case result
             Case RegistrationFlags.RegistrationOpen
-                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedRegOpen")
+                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedRegOpen", Color.DeepSkyBlue)
                 PluginSupport.NotifyMessageFormat("😄🎉🎉🎉", MessageBoxIcon.Information, "StatusMsg_MsgboxRegOpenFormat", plugin.Name)
             Case RegistrationFlags.RegistrationClosed
-                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedRegClosed")
+                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedRegClosed", Color.Goldenrod)
         End Select
 
         Return result
@@ -824,10 +848,10 @@ Public Module PluginSupport
                                                  triggers As String(),
                                                  triggersIndicatesOpen As Boolean) As RegistrationFlags
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_AnalyzingPageContent")
+        PluginSupport.LogMessage(plugin, "StatusMsg_AnalyzingPageContent", Color.Empty)
 
         If (triggers Is Nothing) OrElse (triggers.Length = 0) Then
-            PluginSupport.LogMessage(plugin, "StatusMsg_TriggerAppEmpty")
+            PluginSupport.LogMessage(plugin, "StatusMsg_TriggerAppEmpty", Color.IndianRed)
             Return RegistrationFlags.ApplicationUnknown
         End If
 
@@ -835,7 +859,7 @@ Public Module PluginSupport
         If String.IsNullOrWhiteSpace(pageSource) OrElse
             pageSource.Trim().Equals("<html><head></head><body></body></html>", StringComparison.OrdinalIgnoreCase) Then
 
-            PluginSupport.LogMessageFormat(plugin, "StatusMsg_PageSourceEmptyFormat", {pageSource})
+            PluginSupport.LogMessageFormat(plugin, "StatusMsg_PageSourceEmptyFormat", Color.IndianRed, {pageSource})
             Return RegistrationFlags.ApplicationUnknown
         End If
 
@@ -852,7 +876,7 @@ Public Module PluginSupport
 
         Select Case result
             Case RegistrationFlags.ApplicationOpen
-                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedApplicationOpen")
+                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedApplicationOpen", Color.DeepSkyBlue)
 
                 Dim f As MainForm = AppGlobals.MainFormInstance
                 If f.DarkCheckBox_AllowPluginApplicationFormCheck.Checked Then
@@ -860,7 +884,7 @@ Public Module PluginSupport
                 End If
 
             Case RegistrationFlags.ApplicationClosed
-                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedApplicationClosed")
+                PluginSupport.LogMessage(plugin, "StatusMsg_DetectedApplicationClosed", Color.Goldenrod)
         End Select
 
         Return result
@@ -1052,7 +1076,7 @@ Public Module PluginSupport
     Public Sub WaitToCompleteCloudflareChallenge(plugin As DynamicPlugin, driver As ChromeDriver,
                                                  Optional timeout As Integer = 30000)
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_CloudflareChallengeWait")
+        PluginSupport.LogMessage(plugin, "StatusMsg_CloudflareChallengeWait", Color.Empty)
 
         Dim result As String = driver.ExecuteScript("return navigator.userAgent;").ToString()
         Dim isHeadlessChrome As Boolean = result.Contains("HeadlessChrome", StringComparison.InvariantCultureIgnoreCase)
@@ -1082,7 +1106,7 @@ Public Module PluginSupport
             Thread.Sleep(3000)
         End While
 
-        PluginSupport.LogMessage(plugin, "StatusMsg_CloudflareChallengeCompleted")
+        PluginSupport.LogMessage(plugin, "StatusMsg_CloudflareChallengeCompleted", Color.Empty)
     End Sub
 
 #End Region

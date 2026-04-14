@@ -378,18 +378,18 @@ Public Class DynamicPlugin : Inherits PluginBase
     Private _buttonClearCache As DarkButtonImageAllignFix
 
     ''' <summary>
-    ''' Gets the -dynamically created- <see cref="DarkTextBox"/> 
+    ''' Gets the -dynamically created- <see cref="RichTextBox"/> 
     ''' associated with this plugin to log messages in the plugin's section panel.
     ''' </summary>
-    Public ReadOnly Property LogTextBox As DarkTextBox
+    Public ReadOnly Property LogTextBox As RichTextBox
         Get
             If Me._logTextBox Is Nothing Then
                 Dim f As MainForm = AppGlobals.MainFormInstance
                 Dim act As Action =
                     Sub()
                         Me._logTextBox =
-                            Me.SectionPanel.Controls.OfType(Of DarkTextBox).Where(
-                                Function(tb As DarkTextBox) tb.Name.Equals(Me.LogTextBoxName)).SingleOrDefault()
+                            Me.SectionPanel.Controls.OfType(Of RichTextBox).Where(
+                                Function(tb As RichTextBox) tb.Name.Equals(Me.LogTextBoxName)).SingleOrDefault()
                     End Sub
 
                 If Me.SectionPanel.InvokeRequired Then
@@ -398,16 +398,16 @@ Public Class DynamicPlugin : Inherits PluginBase
                     act()
                 End If
             End If
-            Return Me._LogTextBox
+            Return Me._logTextBox
         End Get
     End Property
     ''' <summary>
     ''' ( Backing field of <see cref="LogTextBox"/> property. )
     ''' <para></para>
-    ''' The -dynamically created- <see cref="DarkTextBox"/> 
+    ''' The -dynamically created- <see cref="RichTextBox"/> 
     ''' associated with this plugin to log messages in the plugin's section panel.
     ''' </summary>
-    Private _logTextBox As DarkTextBox
+    Private _logTextBox As RichTextBox
 
     ''' <summary>
     ''' Gets the -dynamically created- <see cref="Label"/> 
@@ -487,7 +487,7 @@ Public Class DynamicPlugin : Inherits PluginBase
         Me.ButtonRunPluginName = $"{NameOf(DarkButtonImageAllignFix)}_RunPlugin_{Me.UIMemberBaseName}"
         Me.ButtonOpenWebsiteName = $"{NameOf(DarkButtonImageAllignFix)}_OpenWebsite_{Me.UIMemberBaseName}"
         Me.ButtonClearCacheName = $"{NameOf(DarkButtonImageAllignFix)}_ClearCache_{Me.UIMemberBaseName}"
-        Me.LogTextBoxName = $"{NameOf(DarkTextBox)}_Log_{Me.UIMemberBaseName}"
+        Me.LogTextBoxName = $"{NameOf(RichTextBox)}_Log_{Me.UIMemberBaseName}"
         Me.StatusLabelName = $"{NameOf(Label)}_Status_{Me.UIMemberBaseName}"
     End Sub
 
@@ -542,14 +542,14 @@ Public Class DynamicPlugin : Inherits PluginBase
     ''' </summary>
     ''' 
     ''' <param name="logTextBox">
-    ''' A <see cref="TextBox"/> control where status messages can be logged during execution.
+    ''' A <see cref="RichTextBox"/> control where status messages can be logged during execution.
     ''' </param>
     ''' 
     ''' <returns>
     ''' A <see cref="Task(Of RegistrationFlags)"/> representing the asynchronous operation.
     ''' </returns>
     <DebuggerStepThrough>
-    Public Overrides Async Function RunAsync(logTextBox As TextBox) As Task(Of RegistrationFlags)
+    Public Overrides Async Function RunAsync(logTextBox As RichTextBox) As Task(Of RegistrationFlags)
 
         Dim assembly As Assembly = Me.CompileAssembly(Me.VbCode, Me, logTextBox)
 
@@ -559,7 +559,7 @@ Public Class DynamicPlugin : Inherits PluginBase
                         Function(t) GetType(DynamicPlugin).IsAssignableFrom(t) AndAlso Not t.IsAbstract)
 
             If pluginType Is Nothing Then
-                PluginSupport.LogMessage(Me, My.Resources.Strings.MissingDynamicPluginClass)
+                PluginSupport.LogMessage(Me, My.Resources.Strings.MissingDynamicPluginClass, Color.IndianRed)
 
             Else
                 Dim pluginInstance As DynamicPlugin = DirectCast(Activator.CreateInstance(pluginType), DynamicPlugin)
@@ -575,7 +575,7 @@ Public Class DynamicPlugin : Inherits PluginBase
                                    Nothing
                              )
                 If runAsyncMethod Is Nothing Then
-                    PluginSupport.LogMessage(Me, My.Resources.Strings.MissingRunAsyncMethod)
+                    PluginSupport.LogMessage(Me, My.Resources.Strings.MissingRunAsyncMethod, Color.IndianRed)
                 Else
                     Me._isRunning = True
                     Try
@@ -584,7 +584,7 @@ Public Class DynamicPlugin : Inherits PluginBase
                         Return regFlags
 
                     Catch ex As Exception
-                        PluginSupport.LogMessageFormat(Me, My.Resources.Strings.DynamicCodeExecutionErrorFormat, ex.Message)
+                        PluginSupport.LogMessageFormat(Me, My.Resources.Strings.DynamicCodeExecutionErrorFormat, Color.IndianRed, ex.Message)
 
                     Finally
                         pluginInstance = Nothing
@@ -656,14 +656,14 @@ Public Class DynamicPlugin : Inherits PluginBase
     ''' </param>
     ''' 
     ''' <param name="logTextBox">
-    ''' A <see cref="TextBox"/> used to report compilation status or errors.
+    ''' A <see cref="RichTextBox"/> used to report compilation status or errors.
     ''' </param>
     ''' 
     ''' <returns>
     ''' The resulting <see cref="Assembly"/> if the compilation succeeds; otherwise, <see langword="Nothing"/>.
     ''' </returns>
     <DebuggerStepThrough>
-    Private Function CompileAssembly(vbCode As String, instance As Object, logTextBox As TextBox) As Assembly
+    Private Function CompileAssembly(vbCode As String, instance As Object, logTextBox As RichTextBox) As Assembly
 
         Try
             Dim syntaxTree As SyntaxTree = VisualBasicSyntaxTree.ParseText(vbCode)
@@ -678,9 +678,9 @@ Public Class DynamicPlugin : Inherits PluginBase
             Using ms As New MemoryStream()
                 Dim result As EmitResult = compilation.Emit(ms)
                 If Not result.Success Then
-                    PluginSupport.LogMessage(Me, My.Resources.Strings.DynamicCompilationErrors & Environment.NewLine)
+                    PluginSupport.LogMessage(Me, My.Resources.Strings.DynamicCompilationErrors & Environment.NewLine, Color.IndianRed)
                     For Each diag As Diagnostic In result.Diagnostics
-                        PluginSupport.LogMessage(Me, diag.ToString())
+                        PluginSupport.LogMessage(Me, diag.ToString(), Color.IndianRed)
                     Next
                     Return Nothing
                 End If
@@ -692,7 +692,7 @@ Public Class DynamicPlugin : Inherits PluginBase
             End Using
 
         Catch ex As Exception
-            PluginSupport.LogMessageFormat(Me, My.Resources.Strings.StatusMsg_ExceptionFormat, ex.ToString())
+            PluginSupport.LogMessageFormat(Me, My.Resources.Strings.StatusMsg_ExceptionFormat, Color.IndianRed, ex.ToString())
             Return Nothing
 
         End Try

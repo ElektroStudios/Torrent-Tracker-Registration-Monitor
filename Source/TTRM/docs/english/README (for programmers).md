@@ -95,6 +95,7 @@ Perform a click on the element using JavaScript, useful when the **Selenium** me
 ```vbnet
 plugin As DynamicPlugin
 msg As String
+color As Color
 ```
 Print a message in the `LogTextBox` control associated with the plugin.  
 Ideal for displaying progress messages, results, or errors within the **TTRM** interface.  
@@ -103,6 +104,7 @@ Ideal for displaying progress messages, results, or errors within the **TTRM** i
 ```vbnet
 plugin As DynamicPlugin
 msgFormat As String
+color As Color
 ParamArray args As Object()
 ```
 Works similarly to `LogMessage`, but allows using formatted strings to dynamically construct the message, like `String.Format()`.
@@ -111,16 +113,18 @@ Works similarly to `LogMessage`, but allows using formatted strings to dynamical
 ```vbnet
 plugin As DynamicPlugin
 msg As String
+color As Color
 ```
-Same as `LogMessage` fucntion, but it prints the message as-is, without a timestamp.
+Same as `LogMessage` function, but it prints the message as-is, without a timestamp.
 
  - `PrintMessageFormat`
 ```vbnet
 plugin As DynamicPlugin
 msgFormat As String
+color As Color
 ParamArray args As Object()
 ```
-Same as `LogMessageFormat` fucntion, but it prints the message as-is, without a timestamp.
+Same as `LogMessageFormat` function, but it prints the message as-is, without a timestamp.
 
  - `NotifyMessage`
 ```vbnet

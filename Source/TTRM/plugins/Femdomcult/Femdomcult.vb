@@ -1,9 +1,9 @@
 Imports System
 Imports System.Diagnostics
+Imports System.Drawing
+Imports System.Threading
 Imports System.Threading.Tasks
 Imports System.Windows.Forms
-
-Imports Jot.Configuration
 
 Imports TTRM
 Imports TTRM.PluginSupport
@@ -29,13 +29,13 @@ Class FemdomcultPlugin : Inherits DynamicPlugin
                         regFlags = regFlags Or Me.CustomRegistrationCheck(driver)
 
                     Catch ex As Exception
-                        PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", ex.Message)
+                        PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, ex.Message)
                         ' PluginSupport.NotifyMessageFormat("Error", MessageBoxIcon.Error, "StatusMsg_ExceptionFormat", ex.Message)
 
                     Finally
                         driver?.Quit()
-                        PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted")
-                        PluginSupport.PrintMessage(Me, String.Empty)
+                        PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted", Color.LimeGreen)
+                        PluginSupport.PrintMessage(Me, String.Empty, Color.Empty)
                     End Try
                 End Using
 
@@ -58,14 +58,14 @@ Class FemdomcultPlugin : Inherits DynamicPlugin
         Dim registrationTriggers As String() = {"register.php"}
         Dim registrationTriggersIndicatesOpen As Boolean = True
 
-        PluginSupport.LogMessageFormat(Me, "StatusMsg_ConnectingFormat", Me.Name)
-        PluginSupport.LogMessage(Me, $"➜ {Me.UrlLogin}")
+        PluginSupport.LogMessageFormat(Me, "StatusMsg_ConnectingFormat", Color.Empty, Me.Name)
+        PluginSupport.LogMessage(Me, $"➜ {Me.UrlLogin}", Color.Empty)
         PluginSupport.NavigateTo(driver, Me.UrlLogin)
-        PluginSupport.LogMessage(Me, "StatusMsg_WaitingForPageLoad")
+        PluginSupport.LogMessage(Me, "StatusMsg_WaitingForPageLoad", Color.Empty)
         PluginSupport.WaitForPageReady(driver,
                                        afterPageReadyDelay:=TimeSpan.FromSeconds(1),
                                        waitForDomIdle:=True, timeout:=TimeSpan.FromSeconds(30))
-        PluginSupport.LogMessage(Me, "StatusMsg_LoginPageLoaded")
+        PluginSupport.LogMessage(Me, "StatusMsg_LoginPageLoaded", Color.Empty)
 
         Return PluginSupport.EvaluateRegistrationFormState(Me, driver, registrationTriggers, registrationTriggersIndicatesOpen)
     End Function

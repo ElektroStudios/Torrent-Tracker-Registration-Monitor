@@ -95,6 +95,7 @@ Realiza un clic sobre el elemento usando JavaScript, útil cuando el método de 
 ```vbnet
 plugin As DynamicPlugin
 msg As String
+color As Color
 ```
 Imprime un mensaje en el control `LogTextBox` asociado al plugin.
 Ideal para mostrar mensajes de progreso, resultados o errores dentro de la propia interfaz de **TTRM**.
@@ -103,6 +104,7 @@ Ideal para mostrar mensajes de progreso, resultados o errores dentro de la propi
 ```vbnet
 plugin As DynamicPlugin
 msgFormat As String
+color As Color
 ParamArray args As Object()
 ```
 Funciona de manera similar a `LogMessage`, pero permite usar cadenas de formato para construir el mensaje dinámicamente, como `String.Format()`.
@@ -111,6 +113,7 @@ Funciona de manera similar a `LogMessage`, pero permite usar cadenas de formato 
 ```vbnet
 plugin As DynamicPlugin
 msg As String
+color As Color
 ```
 Igual que la función `LogMessage`, pero imprime el mensaje tal cual, sin tiempo de marca.
 
@@ -118,6 +121,7 @@ Igual que la función `LogMessage`, pero imprime el mensaje tal cual, sin tiempo
 ```vbnet
 plugin As DynamicPlugin
 msgFormat As String
+color As Color
 ParamArray args As Object()
 ```
 Igual que la función `LogMessageFormat`, pero imprime el mensaje tal cual, sin tiempo de marca.

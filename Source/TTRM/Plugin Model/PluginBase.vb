@@ -62,13 +62,13 @@ Public MustInherit Class PluginBase : Implements IEquatable(Of PluginBase), IDis
     ''' </summary>
     ''' 
     ''' <param name="logTextBox">
-    ''' A <see cref="TextBox"/> control where status messages can be logged during execution.
+    ''' A <see cref="RichTextBox"/> control where status messages can be logged during execution.
     ''' </param>
     ''' 
     ''' <returns>
     ''' A <see cref="Task(Of RegistrationFlags)"/> representing the asynchronous operation.
     ''' </returns>
-    Public MustOverride Async Function RunAsync(logTextBox As TextBox) As Task(Of RegistrationFlags)
+    Public MustOverride Async Function RunAsync(logTextBox As RichTextBox) As Task(Of RegistrationFlags)
 
     ''' <summary>
     ''' Returns a <see cref="String" /> that represents this instance.

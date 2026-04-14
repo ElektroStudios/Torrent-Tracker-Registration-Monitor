@@ -1,9 +1,14 @@
 # TTRM Change Log 📋
 
-## v1.1.13 *(current)* 🆕
-
 > [!IMPORTANT]
 > ### The application and the GitHub repository has been renamed from “Multi-Tracker and Forums Registration Availability Tool” (MTAFRAT) to “Torrent Tracker Registration Monitor” (TTRM), as the previous name was somewhat too long and confusing. Plugin developers now must use "TTRM" namespace instead of "MTAFRAT".
+
+## v1.2.0 *(current)* 🆕
+
+#### 🛠️ Improvements:
+- Some log messages are now colored to improve readability and make important information easier and faster to identify. This includes plugin execution completion message (green), form open messages (blue), form close messages (orange), and error messages (red).
+
+## v1.1.13 🔄
 
 - Updated plugins:
   - AnimeTorrents

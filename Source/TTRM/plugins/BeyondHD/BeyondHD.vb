@@ -1,5 +1,7 @@
 ﻿Imports System
 Imports System.Diagnostics
+Imports System.Drawing
+Imports System.Threading
 Imports System.Threading.Tasks
 Imports System.Windows.Forms
 
@@ -27,13 +29,13 @@ Class BeyondHDPlugin : Inherits DynamicPlugin
                         regFlags = regFlags Or Me.CustomRegistrationCheck(driver)
 
                     Catch ex As Exception
-                        PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", ex.Message)
+                        PluginSupport.LogMessageFormat(Me, "StatusMsg_ExceptionFormat", Color.IndianRed, ex.Message)
                         ' PluginSupport.NotifyMessageFormat("Error", MessageBoxIcon.Error, "StatusMsg_ExceptionFormat", ex.Message)
 
                     Finally
                         driver?.Quit()
-                        PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted")
-                        PluginSupport.PrintMessage(Me, String.Empty)
+                        PluginSupport.LogMessage(Me, "StatusMsg_OperationCompleted", Color.LimeGreen)
+                        PluginSupport.PrintMessage(Me, String.Empty, Color.Empty)
                     End Try
                 End Using
 
@@ -49,14 +51,14 @@ Class BeyondHDPlugin : Inherits DynamicPlugin
         Dim registrationTriggers As String() = {"Login now on BeyondHD"}
         Dim registrationTriggersIndicatesOpen As Boolean = False
 
-        PluginSupport.LogMessageFormat(Me, "StatusMsg_ConnectingFormat", Me.Name)
-        PluginSupport.LogMessage(Me, $"➜ {Me.UrlRegistration}")
+        PluginSupport.LogMessageFormat(Me, "StatusMsg_ConnectingFormat", Color.Empty, Me.Name)
+        PluginSupport.LogMessage(Me, $"➜ {Me.UrlRegistration}", Color.Empty)
         PluginSupport.NavigateTo(driver, Me.UrlRegistration)
-        PluginSupport.LogMessage(Me, "StatusMsg_WaitingForPageLoad")
+        PluginSupport.LogMessage(Me, "StatusMsg_WaitingForPageLoad", Color.Empty)
         PluginSupport.WaitForPageReady(driver,
                                        afterPageReadyDelay:=TimeSpan.FromSeconds(1),
                                        waitForDomIdle:=True, timeout:=TimeSpan.FromSeconds(30))
-        PluginSupport.LogMessage(Me, "StatusMsg_RegisterPageLoaded")
+        PluginSupport.LogMessage(Me, "StatusMsg_RegisterPageLoaded", Color.Empty)
 
         Return PluginSupport.EvaluateRegistrationFormState(Me, driver, registrationTriggers, registrationTriggersIndicatesOpen)
     End Function

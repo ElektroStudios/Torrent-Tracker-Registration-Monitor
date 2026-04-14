@@ -230,15 +230,15 @@ Public Module UIHelper
 #Region " Restricted Methods "
 
     ''' <summary>
-    ''' Appends a line to the specified <see cref="TextBox"/>.
+    ''' Appends a line to the specified <see cref="RichTextBox"/>.
     ''' </summary>
     ''' 
-    ''' <param name="logTextBox">
-    ''' The textbox to append the message to.
+    ''' <param name="rtb">
+    ''' The RichTextBox to append the message to.
     ''' </param>
     ''' 
-    ''' <param name="message">
-    ''' The message string to log.
+    ''' <param name="line">
+    ''' The string to append.
     ''' </param>
     ''' 
     ''' <param name="addNewLine">
@@ -247,26 +247,36 @@ Public Module UIHelper
     ''' Default is <see langword="True"/>.
     ''' </param>
     <DebuggerStepThrough>
-    Friend Sub AppendLine(tb As TextBox, line As String, Optional addNewLine As Boolean = True)
+    Friend Sub AppendLine(rtb As RichTextBox, line As String, Optional foreColor As Color = Nothing, Optional addNewLine As Boolean = True)
 
-        line = $"{line}{If(addNewLine, Environment.NewLine, Nothing)}"
-        If tb.InvokeRequired Then
-            tb.Invoke(Sub() tb.AppendText(line))
+        If foreColor = Nothing Then
+            foreColor = rtb.ForeColor
+        End If
+
+        Dim finalLine As String = $"{line}{If(addNewLine, Environment.NewLine, Nothing)}"
+        If rtb.InvokeRequired Then
+            rtb.Invoke(Sub() UIHelper.AppendColoredTextAtEnd(rtb, finalLine, foreColor))
         Else
-            tb.AppendText(line)
+            UIHelper.AppendColoredTextAtEnd(rtb, finalLine, foreColor)
         End If
     End Sub
 
     ''' <summary>
-    ''' Appends a line to the specified <see cref="TextBox"/> with a timestamp at the start of the line.
+    ''' Appends a line to the specified <see cref="RichTextBox"/> with a timestamp at the start of the line.
     ''' </summary>
     ''' 
-    ''' <param name="logTextBox">
-    ''' The textbox to append the message to.
+    ''' <param name="rtb">
+    ''' The RichTextBox to append the message to.
     ''' </param>
     ''' 
-    ''' <param name="message">
-    ''' The message string to log.
+    ''' <param name="line">
+    ''' The string to append.
+    ''' </param>
+    ''' 
+    ''' <param name="foreColor">
+    ''' The foreground color for the message text. 
+    ''' <para></para>
+    ''' This value can be null (<see cref="Color.Empty"/>).
     ''' </param>
     ''' 
     ''' <param name="addNewLine">
@@ -275,15 +285,57 @@ Public Module UIHelper
     ''' Default is <see langword="True"/>.
     ''' </param>
     <DebuggerStepThrough>
-    Friend Sub AppendLineWithTimestamp(tb As TextBox, line As String, Optional addNewLine As Boolean = True)
+    Friend Sub AppendLineWithTimestamp(rtb As RichTextBox, line As String, Optional foreColor As Color = Nothing, Optional addNewLine As Boolean = True)
+
+        If foreColor = Nothing Then
+            foreColor = rtb.ForeColor
+        End If
 
         Dim time As String = Date.Now.ToLongTimeString()
-        line = $"[{time}] {line}{If(addNewLine, Environment.NewLine, Nothing)}"
-        If tb.InvokeRequired Then
-            tb.Invoke(Sub() tb.AppendText(line))
+        Dim finalLine As String = $"[{time}] {line}{If(addNewLine, Environment.NewLine, String.Empty)}"
+
+        If rtb.InvokeRequired Then
+            rtb.Invoke(Sub() UIHelper.AppendColoredTextAtEnd(rtb, finalLine, foreColor))
         Else
-            tb.AppendText(line)
+            UIHelper.AppendColoredTextAtEnd(rtb, finalLine, foreColor)
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Appends colored text to the end of the specified <see cref="RichTextBox"/>.
+    ''' </summary>
+    ''' 
+    ''' <param name="rtb">
+    ''' The target <see cref="RichTextBox"/> where the text will be appended.
+    ''' </param>
+    ''' 
+    ''' <param name="text">
+    ''' The text to append to the control.
+    ''' </param>
+    ''' 
+    ''' <param name="color">
+    ''' The <see cref="Color"/> to apply to the appended text.
+    ''' </param>
+    ''' 
+    ''' <remarks>
+    ''' This method moves the caret to the end of the control, applies the specified
+    ''' color to the new text, appends it, and then restores the default foreground color.
+    ''' </remarks>
+    <DebuggerStepThrough>
+    Private Sub AppendColoredTextAtEnd(rtb As RichTextBox, text As String, color As Color)
+
+        ' Move caret to the end of the text
+        rtb.SelectionStart = rtb.TextLength
+        rtb.SelectionLength = 0
+
+        ' Apply color to appended text
+        rtb.SelectionColor = color
+
+        ' Append the text
+        rtb.AppendText(text)
+
+        ' Restore default color
+        rtb.SelectionColor = rtb.ForeColor
     End Sub
 
     ''' <summary>
@@ -691,7 +743,7 @@ Public Module UIHelper
             }
             sectionPanel.Controls.Add(statusLabel)
 
-            Dim logTextBox As New DarkTextBox With {
+            Dim logTextBox As New RichTextBox With {
                 .Name = plugin.LogTextBoxName,
                 .Multiline = True,
                 .[ReadOnly] = True,
@@ -700,9 +752,35 @@ Public Module UIHelper
                 .Width = tp.ClientSize.Width - (sectionPanelBorderMargin * 2),
                 .Location = New Point(buttonRunPlugin.Left, buttonRunPlugin.Bottom + sectionPanelBorderMargin),
                 .Font = f.Font,
-                .ScrollBars = ScrollBars.Vertical
+                .ScrollBars = RichTextBoxScrollBars.Vertical,
+                .BackColor = Color.FromArgb(40, 40, 40),
+                .ForeColor = Color.WhiteSmoke,
+                .BorderStyle = BorderStyle.None,
+                .DetectUrls = True
             }
             sectionPanel.Controls.Add(logTextBox)
+
+            AddHandler logTextBox.TextChanged,
+                Sub(sender As Object, e As EventArgs)
+
+                    Dim rtb As RichTextBox = DirectCast(sender, RichTextBox)
+                    rtb.SelectionStart = rtb.TextLength
+                    rtb.ScrollToCaret()
+                End Sub
+
+            AddHandler logTextBox.LinkClicked,
+                Sub(sender As Object, e As LinkClickedEventArgs)
+
+                    Try
+                        Process.Start(New ProcessStartInfo(e.LinkText) With {
+                                        .UseShellExecute = True
+                                      })
+
+                    Catch ex As Exception
+                        ' Ignore errors.
+                    End Try
+
+                End Sub
 
             AddHandler btPane.Click,
                 Sub(sender As Object, e As EventArgs)
