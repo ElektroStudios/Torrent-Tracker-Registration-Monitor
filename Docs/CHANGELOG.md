@@ -6,7 +6,7 @@
 ## v1.2.0 *(current)* 🆕
 
 #### 🛠️ Improvements:
-- Some log messages are now colored to improve readability and make important information easier and faster to identify. This includes plugin execution completion message (green), form open messages (blue), form close messages (orange), and error messages (red).
+- Some plugin log messages are now colored to improve readability and make important information easier and faster to identify. This includes plugin execution completion message (green), form open messages (blue), form close messages (orange), and error messages (red).
 
 ## v1.1.13 🔄
 
