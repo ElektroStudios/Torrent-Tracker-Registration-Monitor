@@ -717,7 +717,7 @@ Public NotInheritable Class MainForm : Inherits DarkUI.Forms.DarkForm
             End If
 
             Dim pluginsToRun As List(Of DynamicPlugin) =
-                Me.CheckedListBox_AutoPluginRun.CheckedItems.Cast(Of DynamicPlugin)?.ToList()
+                Me.CheckedListBox_AutoPluginRun.CheckedItems?.Cast(Of DynamicPlugin).ToList()
 
             Me.NotifyIcon_Main.ShowBalloonTip(5000, My.Application.Info.AssemblyName, My.Resources.Strings.ExecutingPluginsTooltip, ToolTipIcon.Info)
 

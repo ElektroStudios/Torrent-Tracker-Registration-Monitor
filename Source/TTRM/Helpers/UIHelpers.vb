@@ -922,7 +922,7 @@ Public Module UIHelper
                         Dim currentMatchIndex As Integer = matchingButtons.IndexOf(activeControl)
                         nextButton = matchingButtons((currentMatchIndex + 1) Mod matchingButtons.Count)
                     Else
-                        nextButton = matchingButtons.First()
+                        nextButton = matchingButtons(0)
                     End If
 
                     If nextButton IsNot Nothing Then
