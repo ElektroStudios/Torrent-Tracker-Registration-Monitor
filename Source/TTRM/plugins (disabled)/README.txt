@@ -1,1 +1,1 @@
-Placeholder to put inside plugins that you don't want to use anymore.
+﻿Placeholder to put inside plugins that you don't want to use anymore.

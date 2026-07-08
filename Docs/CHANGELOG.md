@@ -1,4 +1,4 @@
-# TTRM Change Log 📋
+﻿# TTRM Change Log 📋
 
 > [!IMPORTANT]
 > ### The application and the GitHub repository has been renamed from “Multi-Tracker and Forums Registration Availability Tool” (MTAFRAT) to “Torrent Tracker Registration Monitor” (TTRM), as the previous name was somewhat too long and confusing. Plugin developers now must use "TTRM" namespace instead of "MTAFRAT".

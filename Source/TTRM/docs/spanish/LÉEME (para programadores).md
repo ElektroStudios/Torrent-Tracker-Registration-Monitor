@@ -1,4 +1,4 @@
-# 👩‍💻 Documentación para programadores
+﻿# 👩‍💻 Documentación para programadores
 
 (_Este contenido se visualiza mejor en un lector compatible con formato MarkDown._ 👀)
 
