@@ -483,7 +483,7 @@ Public Module UIHelper
                     End If
 
                     Dim sectionPanel As DarkSectionPanel = tb.Controls.OfType(Of DarkSectionPanel).SingleOrDefault()
-                    If sectionPanel IsNot Nothing AndAlso sectionPanel.Controls.Count <> 0 Then
+                    If sectionPanel IsNot Nothing AndAlso sectionPanel.Controls.Count > 0 Then
                         For Each ctrl As Control In sectionPanel.Controls
                             If (TypeOf ctrl Is DarkButton) Then
 
@@ -500,7 +500,7 @@ Public Module UIHelper
                         Next
                     End If
 
-                    If sectionPanel.Contains(f.ActiveControl) Then
+                    If sectionPanel?.Contains(f.ActiveControl) Then
                         sectionPanel.Update()
                     End If
                 Next
