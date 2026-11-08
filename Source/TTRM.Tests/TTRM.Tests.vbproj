@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>TTRM.Tests</RootNamespace>
+    <AssemblyName>TTRM.Tests</AssemblyName>
+    <MyType>Empty</MyType>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>On</OptionStrict>
+    <OptionInfer>Off</OptionInfer>
+    <OptionCompare>Binary</OptionCompare>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Authors>Elektro</Authors>
+    <Company>ElektroStudios</Company>
+    <Product>Torrent Tracker Registration Monitor</Product>
+    <Description>Unit tests for Torrent Tracker Registration Monitor (TTRM).</Description>
+    <Copyright>© ElektroStudios 2025-2026</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" Version="4.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TTRM\TTRM.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+</Project>

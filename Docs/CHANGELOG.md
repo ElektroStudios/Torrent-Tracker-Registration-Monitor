@@ -3,7 +3,33 @@
 > [!IMPORTANT]
 > ### The application and the GitHub repository has been renamed from “Multi-Tracker and Forums Registration Availability Tool” (MTAFRAT) to “Torrent Tracker Registration Monitor” (TTRM), as the previous name was somewhat too long and confusing. Plugin developers now must use "TTRM" namespace instead of "MTAFRAT".
 
-## v1.2.0 *(current)* 🆕
+## v1.2.1 *(current)* 🆕
+
+#### 🛠️ Fixes:
+- Memory usage grew indefinitely over time: every plugin execution (manual or automatic) compiled the plugin source code again and loaded a new assembly into memory that was never released. Now each plugin is compiled only once and reused.
+- An automatic plugin execution could start while a plugin was being run manually (even the same plugin, sharing the same Chrome user profile), because the check for "plugin execution in progress" never worked.
+- When several plugins were running at the same time, the first one to finish marked the work as completed: the program controls were re-enabled, and closing the program did not warn about the plugins still running.
+- If an unexpected error occurred during an automatic plugin execution, the automatic execution timer remained stopped forever.
+- The "Prevent the system from entering sleep mode" option also prevented the display from turning off, and it remained active even after disabling the automatic plugin execution.
+- The automatic execution interval (hours) was still saved and restored when the "Remember current settings" option was disabled.
+- The plugin compiler references were not deterministic: they depended on which .NET assemblies were already loaded at the moment of the first compilation, so a plugin could fail to compile depending on the execution order.
+- When a plugin threw an exception synchronously, only a generic "Exception has been thrown by the target of an invocation" message was logged instead of the real error.
+- The internal network helper sent the current Windows user credentials to third-party websites that requested NTLM/Negotiate authentication.
+- The Selenium cache path argument passed to Selenium Manager contained literal quote characters as part of the path.
+- A non-version folder inside the Selenium cache directory (e.g. a temporary or leftover folder) made every plugin fail to start.
+- The `PluginSupport.ClickElementJs` method (available for plugin developers) did not click the specified element.
+- `PluginSupport.WaitForElement` failed when the element was re-rendered by the website while waiting for it, instead of retrying.
+- The plugin buttons accumulated duplicated focus event handlers every time they received focus, executing their focus logic more and more times.
+- The program kept loading the remaining plugins (and showing more error messages) after a plugin failed to load and the program was closing.
+- The error raised when the fullscreen application detection failed contained a wrong error code.
+- The program update checker did not recognize GitHub release tags with a suffix (e.g. "v1.3.0-beta" or "v1.3.0-rc1"), so those new versions were not notified.
+- The duplicated plugin detection could fail for plugin names written with different (but canonically equivalent) Unicode character sequences, such as accented letters.
+- Fixed an infinite recursion in the synchronous methods of the internal GitHub API helper used to retrieve releases.
+
+#### 🌟 Improvements:
+- Added a unit test project (TTRM.Tests) that validates the core logic and the integrity of all bundled plugins: JSON metadata, referenced files, URLs, resource keys, and that every plugin source code compiles with the same Roslyn settings used by the application at runtime.
+
+## v1.2.0 🔄
 
 #### 🛠️ Improvements:
 - Some plugin log messages are now colored to improve readability and make important information easier and faster to identify. This includes plugin execution completion message (green), form open messages (blue), form close messages (orange), and error messages (red).

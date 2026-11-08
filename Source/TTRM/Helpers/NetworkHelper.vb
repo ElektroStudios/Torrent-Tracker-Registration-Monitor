@@ -107,7 +107,7 @@ Public Module NetworkHelper
     <DebuggerStepThrough>
     Public Function UrlExists(url As Uri) As Boolean
 
-        Return Task.Run(Async Function() Await NetworkHelper.GetUrlStatusCodeAsync(url)).GetAwaiter().GetResult() <> HttpStatusCode.NotFound
+        Return Task.Run(Async Function() Await NetworkHelper.GetUrlStatusCodeAsync(url).ConfigureAwait(False)).GetAwaiter().GetResult() <> HttpStatusCode.NotFound
     End Function
 
     ''' <summary>
@@ -146,7 +146,10 @@ Public Module NetworkHelper
             httpClientHandler.AllowAutoRedirect = True
             httpClientHandler.SslProtocols = System.Security.Authentication.SslProtocols.None
             httpClientHandler.MaxAutomaticRedirections = 5
-            httpClientHandler.UseDefaultCredentials = True
+            ' Note: The credentials of the current Windows user must never be sent to third-party websites.
+            ' (With 'UseDefaultCredentials = True', any website requesting NTLM/Negotiate authentication 
+            ' would receive the user's Windows credentials).
+            httpClientHandler.UseDefaultCredentials = False
 
             ' Disable SSL Certificate Validation to avoid this "AuthenticationException" exception message:
             ' "The remote certificate is invalid according to the validation procedure."
@@ -162,7 +165,7 @@ Public Module NetworkHelper
                 If Not String.IsNullOrEmpty(useragent) Then
                     client.DefaultRequestHeaders.UserAgent.ParseAdd(useragent)
                 End If
-                Using checkingResponse As HttpResponseMessage = Await client.GetAsync(url)
+                Using checkingResponse As HttpResponseMessage = Await client.GetAsync(url).ConfigureAwait(False)
                     Return checkingResponse.StatusCode
                 End Using
             End Using

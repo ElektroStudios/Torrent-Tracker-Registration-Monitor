@@ -71,6 +71,8 @@ Friend Module ApplicationHelper
                 MessageBox.Show(String.Format(My.Resources.Strings.ErrorLoadingPluginFormat, file, ex.Message),
                                 My.Application.Info.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 f.Close()
+                ' The application is closing; do not continue loading (and reporting errors for) the remaining plugins.
+                Exit For
             End Try
         Next
 
@@ -270,17 +272,19 @@ Friend Module ApplicationHelper
     ''' <see langword="False"/> otherwise.
     ''' </returns>
     ''' 
-    ''' <exception cref="Win32Exception">
+    ''' <exception cref="COMException">
     ''' Thrown when the native Windows Shell function <c>SHQueryUserNotificationState</c> fails.
-    ''' The error code from the failed P/Invoke call is retrieved using <see cref="Marshal.GetLastPInvokeError"/>.
+    ''' The exception is built from the HRESULT returned by the function.
     ''' </exception>
     <DebuggerStepThrough>
     Friend Function IsFullscreenAppRunning() As Boolean
 
         Dim queryState As QueryUserNotificationState
-        If NativeMethods.SHQueryUserNotificationState(queryState) <> 0 Then
-            Dim lastErrorCode As Integer = Marshal.GetLastPInvokeError()
-            Throw New Win32Exception(lastErrorCode)
+        ' Note: SHQueryUserNotificationState returns an HRESULT (it does not set the last Win32 error),
+        ' so the exception must be built from the returned HRESULT.
+        Dim hResult As Integer = NativeMethods.SHQueryUserNotificationState(queryState)
+        If hResult <> 0 Then
+            Marshal.ThrowExceptionForHR(hResult)
         End If
 
         Return (queryState = QueryUserNotificationState.Busy) OrElse ' A full-screen application is running or Presentation Settings are applied.

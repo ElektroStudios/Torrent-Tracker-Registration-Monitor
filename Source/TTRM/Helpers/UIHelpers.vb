@@ -13,6 +13,7 @@ Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Text
 Imports System.Text.RegularExpressions
+Imports System.Threading
 
 Imports DarkUI.Controls
 
@@ -788,25 +789,25 @@ Public Module UIHelper
                     btPane.Focus()
                 End Sub
 
-            Dim gotFocusHandler As New EventHandler(Sub(sender As Object, e As EventArgs)
-                                                        If f.IsFormLoaded Then
-                                                            f.TabControlNoBorder_Main.SelectedTab = tp
-                                                            btPane.Focus()
-                                                            f.DarkSectionPanel_Plugins.Update()
-                                                        End If
-                                                    End Sub)
-
+            ' Note: The previous implementation removed and re-added anonymous handlers on every GotFocus event,
+            ' which caused the number of attached handlers to grow on each focus, executing this logic 
+            ' multiple (and increasing) times per focus. A re-entrancy flag is used instead, 
+            ' because calling "btPane.Focus()" after selecting the tab page raises GotFocus again.
+            Dim isHandlingGotFocus As Boolean = False
             AddHandler btPane.GotFocus,
                 Sub(sender As Object, e As EventArgs)
-                    RemoveHandler btPane.GotFocus, gotFocusHandler
-                    gotFocusHandler(sender, e)
+                    If isHandlingGotFocus OrElse Not f.IsFormLoaded Then
+                        Exit Sub
+                    End If
 
-                    AddHandler btPane.GotFocus,
-                        Sub(sender2 As Object, e2 As EventArgs)
-                            RemoveHandler btPane.GotFocus, gotFocusHandler
-                            gotFocusHandler(sender2, e2)
-                            AddHandler btPane.GotFocus, gotFocusHandler
-                        End Sub
+                    isHandlingGotFocus = True
+                    Try
+                        f.TabControlNoBorder_Main.SelectedTab = tp
+                        btPane.Focus()
+                        f.DarkSectionPanel_Plugins.Update()
+                    Finally
+                        isHandlingGotFocus = False
+                    End Try
                 End Sub
 
             AddHandler tp.Enter,
@@ -950,62 +951,81 @@ Public Module UIHelper
     <DebuggerStepThrough>
     Friend Async Function RunPluginFromButtonAsync(plugin As DynamicPlugin) As Task(Of RegistrationFlags)
 
-        Dim f As MainForm = AppGlobals.MainFormInstance
-        f.UseWaitCursor = True
+        ArgumentNullException.ThrowIfNull(plugin)
 
-        If plugin.ButtonRunPlugin.InvokeRequired Then
-            plugin.ButtonRunPlugin.Invoke(Sub() plugin.ButtonRunPlugin.Enabled = False)
-        Else
-            plugin.ButtonRunPlugin.Enabled = False
-        End If
+        ' Note: This method can be called from a thread-pool thread (parallel automatic execution),
+        ' so every access to UI controls is marshaled to the UI thread.
+        Dim f As MainForm = AppGlobals.MainFormInstance
+
+        ' Note: Several plugins can run at the same time (parallel automatic execution, 
+        ' or another plugin started manually while one is running), 
+        ' so the number of running plugins is tracked instead of a single Boolean flag.
+        ' Previously, the first plugin to finish marked the work as completed and re-enabled 
+        ' the controls while other plugins were still running.
+        Interlocked.Increment(f.RunningPluginCount)
+        f.PluginWorkInProgress = True
+
+        Dim clearPreviousLogEntries As Boolean
+        UIHelper.InvokeOnUIThread(
+            Sub()
+                f.UseWaitCursor = True
+                plugin.ButtonRunPlugin.Enabled = False
+                clearPreviousLogEntries = f.DarkCheckBox_ClearPreviousLogEntries.Checked
+                If clearPreviousLogEntries Then
+                    plugin.LogTextBox.Clear()
+                End If
+            End Sub)
 
         UIHelper.ToggleControlsEnabledState(enable:=False)
-
-        If f.DarkCheckBox_ClearPreviousLogEntries.Checked() Then
-            If plugin.LogTextBox.InvokeRequired Then
-                plugin.LogTextBox.Invoke(Sub() plugin.LogTextBox.Clear())
-            Else
-                plugin.LogTextBox.Clear()
-            End If
-        End If
-
         UIHelper.UpdateStatusLabelText(plugin, Nothing)
-        Dim flags As RegistrationFlags
+
+        Dim flags As RegistrationFlags = RegistrationFlags.Null
         Try
-            f.PluginWorkInProgress = True
-            flags = Await plugin.RunAsync(plugin.LogTextBox)
+            flags = Await plugin.RunAsync(plugin.LogTextBox).ConfigureAwait(False)
             Return flags
 
         Finally
-            f.PluginWorkInProgress = f.IsRunningPluginsAutomatically
+            Dim remainingRunningPlugins As Integer = Interlocked.Decrement(f.RunningPluginCount)
+            f.PluginWorkInProgress = (remainingRunningPlugins > 0) OrElse f.IsRunningPluginsAutomatically
 
-            If Not f.IsRunningPluginsAutomatically Then
+            If Not f.PluginWorkInProgress Then
                 UIHelper.ToggleControlsEnabledState(enable:=True)
-                f.UseWaitCursor = False
-                Cursor.Current = Cursors.Default
             End If
 
-            If plugin.ButtonRunPlugin.InvokeRequired Then
-                plugin.ButtonRunPlugin.Invoke(
-                    Sub()
-                        plugin.ButtonRunPlugin.Enabled = True
-                        UIHelper.UpdateStatusLabelText(plugin, flags)
-                    End Sub)
-            Else
-                plugin.ButtonRunPlugin.Enabled = True
-                UIHelper.UpdateStatusLabelText(plugin, flags)
-            End If
-
-            If plugin.ButtonRunPlugin.InvokeRequired Then
-                plugin.ButtonRunPlugin.Invoke(Sub() plugin.ButtonRunPlugin.Focus())
-            Else
-                plugin.ButtonRunPlugin.Focus()
-            End If
+            UIHelper.InvokeOnUIThread(
+                Sub()
+                    If Not f.PluginWorkInProgress Then
+                        f.UseWaitCursor = False
+                        Cursor.Current = Cursors.Default
+                    End If
+                    plugin.ButtonRunPlugin.Enabled = True
+                    UIHelper.UpdateStatusLabelText(plugin, flags)
+                    plugin.ButtonRunPlugin.Focus()
+                End Sub)
 
         End Try
-
-        Return RegistrationFlags.Null
     End Function
+
+    ''' <summary>
+    ''' Executes the specified action on the UI thread of the main form, 
+    ''' synchronously, invoking it if required.
+    ''' </summary>
+    ''' 
+    ''' <param name="action">
+    ''' The action to execute.
+    ''' </param>
+    <DebuggerStepThrough>
+    Private Sub InvokeOnUIThread(action As Action)
+
+        ArgumentNullException.ThrowIfNull(action)
+
+        Dim f As MainForm = AppGlobals.MainFormInstance
+        If f.InvokeRequired Then
+            f.Invoke(action)
+        Else
+            action()
+        End If
+    End Sub
 
 #End Region
 

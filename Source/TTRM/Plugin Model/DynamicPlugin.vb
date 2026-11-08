@@ -131,6 +131,12 @@ Public Class DynamicPlugin : Inherits PluginBase
     Private _isRunning As Boolean
 
     ''' <summary>
+    ''' The assembly compiled from <see cref="DynamicPlugin.VbCode"/>, 
+    ''' cached after the first successful compilation.
+    ''' </summary>
+    Private compiledAssembly As Assembly
+
+    ''' <summary>
     ''' Gets or sets the VB.NET source code associated with this plugin.
     ''' </summary>
     Public Property VbCode As String
@@ -551,7 +557,14 @@ Public Class DynamicPlugin : Inherits PluginBase
     <DebuggerStepThrough>
     Public Overrides Async Function RunAsync(logTextBox As RichTextBox) As Task(Of RegistrationFlags)
 
-        Dim assembly As Assembly = Me.CompileAssembly(Me.VbCode, Me, logTextBox)
+        ' The plugin source code is compiled only once per plugin; the resulting assembly is reused.
+        ' Note: Previously the code was compiled again on every execution, and each resulting assembly was loaded 
+        ' into the same (never unloaded) AssemblyLoadContext, so memory usage grew indefinitely 
+        ' with every manual or automatic plugin execution.
+        If Me.compiledAssembly Is Nothing Then
+            Me.compiledAssembly = Me.CompileAssembly(Me.VbCode, Me, logTextBox)
+        End If
+        Dim assembly As Assembly = Me.compiledAssembly
 
         If assembly IsNot Nothing Then
             Dim pluginType As Type =
@@ -583,6 +596,10 @@ Public Class DynamicPlugin : Inherits PluginBase
                             Await CType(runAsyncMethod.Invoke(pluginInstance, Nothing), Task(Of RegistrationFlags))
                         Return regFlags
 
+                    Catch ex As TargetInvocationException When ex.InnerException IsNot Nothing
+                        ' Exceptions thrown synchronously by the plugin method are wrapped by reflection; 
+                        ' log the real exception message instead of the generic "Exception has been thrown by the target of an invocation".
+                        PluginSupport.LogMessageFormat(Me, My.Resources.Strings.DynamicCodeExecutionErrorFormat, Color.IndianRed, ex.InnerException.Message)
                     Catch ex As Exception
                         PluginSupport.LogMessageFormat(Me, My.Resources.Strings.DynamicCodeExecutionErrorFormat, Color.IndianRed, ex.Message)
 
@@ -617,30 +634,51 @@ Public Class DynamicPlugin : Inherits PluginBase
     <DebuggerStepThrough>
     Protected Shared Function InitializeCompilationReferences() As ReadOnlyCollection(Of MetadataReference)
 
-        Dim refs As New List(Of MetadataReference) From {
-            MetadataReference.CreateFromFile(Assembly.GetExecutingAssembly().Location)
+        ' Note: The references were previously taken only from the assemblies that happened to be loaded 
+        ' in the AppDomain at the moment of the first access to this property. 
+        ' That made the set of references non-deterministic: a plugin using a framework assembly
+        ' not loaded yet at that moment (e.g. System.Net.Http, System.Text.RegularExpressions)
+        ' could fail to compile depending on the order in which things were executed.
+        '
+        ' Now the references include every assembly of the "Trusted Platform Assemblies" list 
+        ' (all the .NET runtime / Windows Desktop framework assemblies and the application dependencies),
+        ' plus the assemblies currently loaded, plus TTRM and Selenium assemblies.
+        Dim paths As New List(Of String) From {
+            Assembly.GetExecutingAssembly().Location,
+            GetType(IWebDriver).Assembly.Location,
+            GetType(ChromeDriver).Assembly.Location
         }
 
-        For Each asm As Assembly In AppDomain.CurrentDomain.GetAssemblies()
-            Try
-                Dim path As String = asm.Location
-                If Not String.IsNullOrEmpty(path) Then
-                    refs.Add(MetadataReference.CreateFromFile(path))
-                End If
-            Catch
-            End Try
-        Next
+        Dim tpa As String = TryCast(AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES"), String)
+        If Not String.IsNullOrEmpty(tpa) Then
+            paths.AddRange(tpa.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
+        End If
 
-        Dim seleniumTypes As Type() = {GetType(IWebDriver), GetType(ChromeDriver)}
-        For Each t As Type In seleniumTypes
-            Dim asmPath As String = t.Assembly.Location
-            If Not refs.Any(Function(ref As MetadataReference) String.Equals(ref.Display, asmPath, StringComparison.InvariantCultureIgnoreCase)) Then
-                refs.Add(MetadataReference.CreateFromFile(asmPath))
+        For Each asm As Assembly In AppDomain.CurrentDomain.GetAssemblies()
+            If Not asm.IsDynamic AndAlso Not String.IsNullOrEmpty(asm.Location) Then
+                paths.Add(asm.Location)
             End If
         Next
 
-        ' Remove duplicates (if any).
-        Return New ReadOnlyCollection(Of MetadataReference)(refs.GroupBy(Function(r) r.Display, StringComparer.OrdinalIgnoreCase).Select(Function(group) group.First()).ToArray())
+        Dim refs As New List(Of MetadataReference)
+        Dim addedPaths As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        Dim addedNames As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        For Each asmPath As String In paths
+            ' Only one reference per assembly file and per assembly name (first wins).
+            If Not addedPaths.Add(asmPath) OrElse Not addedNames.Add(Path.GetFileNameWithoutExtension(asmPath)) Then
+                Continue For
+            End If
+            If Not File.Exists(asmPath) Then
+                Continue For
+            End If
+            Try
+                refs.Add(MetadataReference.CreateFromFile(asmPath))
+            Catch ex As BadImageFormatException
+                ' Not a managed assembly. Ignore.
+            End Try
+        Next
+
+        Return New ReadOnlyCollection(Of MetadataReference)(refs)
     End Function
 
     ''' <summary>
@@ -669,7 +707,7 @@ Public Class DynamicPlugin : Inherits PluginBase
             Dim syntaxTree As SyntaxTree = VisualBasicSyntaxTree.ParseText(vbCode)
 
             Dim compilation As VisualBasicCompilation = VisualBasicCompilation.Create(
-                $"{My.Application.Info.AssemblyName}_{Me.UIMemberBaseName}_{Guid.NewGuid():N}",
+                $"{GetType(DynamicPlugin).Assembly.GetName().Name}_{Me.UIMemberBaseName}_{Guid.NewGuid():N}",
                 syntaxTrees:={syntaxTree},
                 references:=DynamicPlugin.CompilationReferences,
                 options:=DynamicPlugin.CompileOptions

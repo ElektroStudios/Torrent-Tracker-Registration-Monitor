@@ -9,6 +9,7 @@ Option Infer Off
 #Region " Imports "
 
 Imports System.IO
+Imports System.Threading
 
 #End Region
 
@@ -45,7 +46,9 @@ Friend Module SeleniumHelper
                 .ArgumentList.Add("chromedriver")
 
                 .ArgumentList.Add("--cache-path")
-                .ArgumentList.Add($"""{AppGlobals.SeleniumCachePath}""")
+                ' Note: 'ArgumentList' already quotes and escapes each argument as needed;
+                ' adding literal quotes here would make them part of the path value.
+                .ArgumentList.Add(AppGlobals.SeleniumCachePath)
 
                 .WindowStyle = ProcessWindowStyle.Hidden
             End With
@@ -120,13 +123,7 @@ Friend Module SeleniumHelper
     Friend Function GetLatestChromeDirPath() As String
 
         Dim basePath As String = Path.Combine(AppGlobals.SeleniumCachePath, "chrome", "win64")
-        Dim versionDirs As String() = Directory.GetDirectories(basePath)
-        If versionDirs.Length = 0 Then
-            Throw New DirectoryNotFoundException($"No chrome directory found in cache path: {basePath}")
-        End If
-
-        Dim latestDir As String = versionDirs.OrderByDescending(Function(d) New Version(Path.GetFileName(d))).First()
-        Return latestDir
+        Return SeleniumHelper.GetLatestVersionDirectory(basePath)
     End Function
 
     ''' <summary>
@@ -145,12 +142,54 @@ Friend Module SeleniumHelper
 
         Dim basePath As String = Path.Combine(AppGlobals.SeleniumCachePath, "chromedriver", "win64")
 
-        Dim versionDirs As String() = Directory.GetDirectories(basePath)
-        If versionDirs.Length = 0 Then
-            Throw New DirectoryNotFoundException($"No chromedriver directory found in cache path: {basePath}")
+        Return SeleniumHelper.GetLatestVersionDirectory(basePath)
+    End Function
+
+#End Region
+
+#Region " Private Methods "
+
+    ''' <summary>
+    ''' Gets the full path of the subdirectory with the highest version name 
+    ''' (e.g., "131.0.6778.204") inside the specified directory.
+    ''' <para></para>
+    ''' Subdirectories whose name is not a valid version (e.g., temporary or leftover folders) are ignored.
+    ''' </summary>
+    ''' 
+    ''' <param name="basePath">
+    ''' The directory that contains the version subdirectories.
+    ''' </param>
+    ''' 
+    ''' <returns>
+    ''' The full path of the subdirectory with the highest version name.
+    ''' </returns>
+    ''' 
+    ''' <exception cref="DirectoryNotFoundException">
+    ''' Thrown when <paramref name="basePath"/> does not exist, or it does not contain any version subdirectory.
+    ''' </exception>
+    <DebuggerStepThrough>
+    Private Function GetLatestVersionDirectory(basePath As String) As String
+
+        If Not Directory.Exists(basePath) Then
+            Throw New DirectoryNotFoundException($"Directory not found: {basePath}")
         End If
 
-        Dim latestDir As String = versionDirs.OrderByDescending(Function(d) New Version(Path.GetFileName(d))).First()
+        Dim latestDir As String = Nothing
+        Dim latestVersion As Version = Nothing
+        For Each dirPath As String In Directory.EnumerateDirectories(basePath)
+            Thread.CurrentThread.Join(0)
+
+            Dim ver As Version = Nothing
+            If Version.TryParse(Path.GetFileName(dirPath), ver) AndAlso
+               (latestVersion Is Nothing OrElse ver > latestVersion) Then
+                latestVersion = ver
+                latestDir = dirPath
+            End If
+        Next
+
+        If latestDir Is Nothing Then
+            Throw New DirectoryNotFoundException($"No version directory found in cache path: {basePath}")
+        End If
         Return latestDir
     End Function
 

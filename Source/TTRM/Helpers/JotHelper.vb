@@ -203,6 +203,7 @@ Friend Module JotHelper
             JotHelper.jotTracker.StopTracking(My.Forms.MainForm.DarkCheckBox_SearchProgramUpdates)
             JotHelper.jotTracker.StopTracking(My.Forms.MainForm.CheckedListBox_AutoPluginRun)
             JotHelper.jotTracker.StopTracking(My.Forms.MainForm.DarkComboBox_Language)
+            JotHelper.jotTracker.StopTracking(My.Forms.MainForm.DarkNumericUpDown_Hours)
 
             JotHelper.jotTracker.Forget(My.Forms.MainForm.DarkCheckBox_RememberCurrentSettings)
             JotHelper.jotTracker.Forget(My.Forms.MainForm.DarkCheckBox_AutoPluginRun)
@@ -215,6 +216,7 @@ Friend Module JotHelper
             JotHelper.jotTracker.Forget(My.Forms.MainForm.DarkCheckBox_SearchProgramUpdates)
             JotHelper.jotTracker.Forget(My.Forms.MainForm.CheckedListBox_AutoPluginRun)
             JotHelper.jotTracker.Forget(My.Forms.MainForm.DarkComboBox_Language)
+            JotHelper.jotTracker.Forget(My.Forms.MainForm.DarkNumericUpDown_Hours)
 
             JotHelper.jotTracker.ApplyDefaults(My.Forms.MainForm.DarkCheckBox_RememberCurrentSettings)
             JotHelper.jotTracker.ApplyDefaults(My.Forms.MainForm.DarkCheckBox_AutoPluginRun)
@@ -227,6 +229,7 @@ Friend Module JotHelper
             JotHelper.jotTracker.ApplyDefaults(My.Forms.MainForm.DarkCheckBox_SearchProgramUpdates)
             JotHelper.jotTracker.ApplyDefaults(My.Forms.MainForm.CheckedListBox_AutoPluginRun)
             JotHelper.jotTracker.ApplyDefaults(My.Forms.MainForm.DarkComboBox_Language)
+            JotHelper.jotTracker.ApplyDefaults(My.Forms.MainForm.DarkNumericUpDown_Hours)
 
             Dim store As JsonFileStore = DirectCast(JotHelper.jotTracker.Store, JsonFileStore)
             store.ClearData(JotHelper.checkBoxRememberCurrentSettingsTrackingConfig.GetStoreId(My.Forms.MainForm.DarkCheckBox_RememberCurrentSettings))
@@ -240,6 +243,7 @@ Friend Module JotHelper
             store.ClearData(JotHelper.checkBoxOtherTrackingConfig.GetStoreId(My.Forms.MainForm.DarkCheckBox_SearchProgramUpdates))
             store.ClearData(JotHelper.checkedListBoxTrackingConfig.GetStoreId(My.Forms.MainForm.CheckedListBox_AutoPluginRun))
             store.ClearData(JotHelper.comboBoxLanguageTrackingConfig.GetStoreId(My.Forms.MainForm.DarkComboBox_Language))
+            store.ClearData(JotHelper.numericUpDownHoursTrackingConfig.GetStoreId(My.Forms.MainForm.DarkNumericUpDown_Hours))
         Catch ex As DirectoryNotFoundException
             ' Directory may have been deleted by user. Ignore.
         End Try

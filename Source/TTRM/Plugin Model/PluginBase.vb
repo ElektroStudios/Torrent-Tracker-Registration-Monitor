@@ -91,7 +91,11 @@ Public MustInherit Class PluginBase : Implements IEquatable(Of PluginBase), IDis
     ''' </returns>
     Public Overrides Function GetHashCode() As Integer
 
-        Return If(Me.ToString?.ToLowerInvariant().GetHashCode(), 0)
+        ' Note: the hash code must be computed with the same comparer used in the 'Equals' method,
+        ' otherwise two plugins considered equal could produce different hash codes
+        ' (e.g., canonically equivalent Unicode strings), breaking HashSet / Dictionary lookups.
+        Dim value As String = Me.ToString()
+        Return If(value Is Nothing, 0, StringComparer.InvariantCultureIgnoreCase.GetHashCode(value))
     End Function
 
     ''' <summary>

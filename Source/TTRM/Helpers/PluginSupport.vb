@@ -361,7 +361,10 @@ Public Module PluginSupport
                                       Return element
                                   End If
                               Catch ex As NoSuchElementException
-                                  ' Ignore.
+                                  ' Ignore. The element is not present yet.
+                              Catch ex As StaleElementReferenceException
+                                  ' Ignore. The element was re-rendered (detached from the DOM) 
+                                  ' between finding it and checking its state; try again.
                               End Try
                               ' Return Nothing to continue waiting.
                               Return Nothing
@@ -385,8 +388,14 @@ Public Module PluginSupport
     <DebuggerStepThrough>
     Public Sub ClickElementJs(driver As IWebDriver, element As IWebElement)
 
+        ArgumentNullException.ThrowIfNull(element)
+
         Dim js As IJavaScriptExecutor = TryCast(driver, IJavaScriptExecutor)
-        js.ExecuteScript("try{Object.defineProperty(navigator, 'webdriver', {get: () => undefined});}catch(e){}", element)
+        If js Is Nothing Then
+            Throw New ArgumentException(My.Resources.Strings.IWebDriverMustSupportJavascriptExecution, NameOf(driver))
+        End If
+
+        js.ExecuteScript("arguments[0].click();", element)
     End Sub
 
     ''' <summary>
@@ -787,18 +796,13 @@ Public Module PluginSupport
         End If
 
         Dim pageSource As String = driver.PageSource
-        If String.IsNullOrWhiteSpace(pageSource) OrElse
-            pageSource.Trim().Equals("<html><head></head><body></body></html>", StringComparison.OrdinalIgnoreCase) Then
+        If PluginSupport.IsBlankPageSource(pageSource) Then
 
             PluginSupport.LogMessageFormat(plugin, "StatusMsg_PageSourceEmptyFormat", Color.IndianRed, {pageSource})
             Return RegistrationFlags.RegistrationUnknown
         End If
 
-        Dim compareInfo As CompareInfo = CultureInfo.InvariantCulture.CompareInfo
-        Dim compareinfoOptions As CompareOptions = CompareOptions.IgnoreCase Or CompareOptions.IgnoreNonSpace
-
-        Dim anyTriggerFound As Boolean =
-            triggers.Any(Function(trigger As String) compareInfo.IndexOf(pageSource, trigger, compareinfoOptions) >= 0)
+        Dim anyTriggerFound As Boolean = PluginSupport.PageSourceContainsAnyTrigger(pageSource, triggers)
 
         Dim result As RegistrationFlags =
             If(triggersIndicatesOpen,
@@ -856,18 +860,13 @@ Public Module PluginSupport
         End If
 
         Dim pageSource As String = driver.PageSource
-        If String.IsNullOrWhiteSpace(pageSource) OrElse
-            pageSource.Trim().Equals("<html><head></head><body></body></html>", StringComparison.OrdinalIgnoreCase) Then
+        If PluginSupport.IsBlankPageSource(pageSource) Then
 
             PluginSupport.LogMessageFormat(plugin, "StatusMsg_PageSourceEmptyFormat", Color.IndianRed, {pageSource})
             Return RegistrationFlags.ApplicationUnknown
         End If
 
-        Dim compareInfo As CompareInfo = CultureInfo.InvariantCulture.CompareInfo
-        Dim compareinfoOptions As CompareOptions = CompareOptions.IgnoreCase Or CompareOptions.IgnoreNonSpace
-
-        Dim anyTriggerFound As Boolean =
-            triggers.Any(Function(trigger As String) compareInfo.IndexOf(pageSource, trigger, compareinfoOptions) >= 0)
+        Dim anyTriggerFound As Boolean = PluginSupport.PageSourceContainsAnyTrigger(pageSource, triggers)
 
         Dim result As RegistrationFlags =
             If(triggersIndicatesOpen,
@@ -1043,12 +1042,13 @@ Public Module PluginSupport
             }
 
             Using client As New HttpClient(handler)
-                Dim resp As HttpResponseMessage = client.GetAsync(url).ConfigureAwait(False).GetAwaiter().GetResult()
-                Dim body As String = resp.Content.ReadAsStringAsync().ConfigureAwait(False).GetAwaiter().GetResult()
+                Using resp As HttpResponseMessage = client.GetAsync(url).ConfigureAwait(False).GetAwaiter().GetResult()
+                    Dim body As String = resp.Content.ReadAsStringAsync().ConfigureAwait(False).GetAwaiter().GetResult()
 
-                Return resp.StatusCode <> HttpStatusCode.OK AndAlso
-                       Not String.IsNullOrWhiteSpace(body) AndAlso
-                       challengeIndicators.Any(Function(indicator As String) body.Contains(indicator, StringComparison.InvariantCultureIgnoreCase))
+                    Return resp.StatusCode <> HttpStatusCode.OK AndAlso
+                           Not String.IsNullOrWhiteSpace(body) AndAlso
+                           challengeIndicators.Any(Function(indicator As String) body.Contains(indicator, StringComparison.InvariantCultureIgnoreCase))
+                End Using
 
             End Using
         End Using
@@ -1136,7 +1136,7 @@ Public Module PluginSupport
     ''' A localized and optionally formatted string suitable for display to the user.
     ''' </returns>
     <DebuggerStepThrough>
-    Private Function ResolveLocalizedString(keyOrText As String, ParamArray args As Object()) As String
+    Friend Function ResolveLocalizedString(keyOrText As String, ParamArray args As Object()) As String
 
         Dim rm As ResourceManager = AppGlobals.StringsResourceManager
         Dim localized As String = rm.GetString(keyOrText, CultureInfo.CurrentUICulture)
@@ -1155,6 +1155,58 @@ Public Module PluginSupport
     End Function
 
     ''' <summary>
+    ''' Determines whether the specified page source is blank 
+    ''' (null, empty, white-space, or an empty HTML document skeleton).
+    ''' </summary>
+    ''' 
+    ''' <param name="pageSource">
+    ''' The page source to check.
+    ''' </param>
+    ''' 
+    ''' <returns>
+    ''' <see langword="True"/> if the page source is blank; otherwise, <see langword="False"/>.
+    ''' </returns>
+    <DebuggerStepThrough>
+    Friend Function IsBlankPageSource(pageSource As String) As Boolean
+
+        Return String.IsNullOrWhiteSpace(pageSource) OrElse
+               pageSource.Trim().Equals("<html><head></head><body></body></html>", StringComparison.OrdinalIgnoreCase)
+    End Function
+
+    ''' <summary>
+    ''' Determines whether the specified page source contains any of the specified trigger strings.
+    ''' <para></para>
+    ''' The comparison is culture-invariant, case-insensitive and ignores non-spacing characters (e.g., accents/diacritics).
+    ''' </summary>
+    ''' 
+    ''' <param name="pageSource">
+    ''' The page source to search in.
+    ''' </param>
+    ''' 
+    ''' <param name="triggers">
+    ''' One or more trigger strings to search for.
+    ''' </param>
+    ''' 
+    ''' <returns>
+    ''' <see langword="True"/> if any trigger string is found in the page source; otherwise, <see langword="False"/>.
+    ''' </returns>
+    ''' 
+    ''' <exception cref="ArgumentNullException">
+    ''' Thrown when <paramref name="pageSource"/> or <paramref name="triggers"/> is null.
+    ''' </exception>
+    <DebuggerStepThrough>
+    Friend Function PageSourceContainsAnyTrigger(pageSource As String, triggers As String()) As Boolean
+
+        ArgumentNullException.ThrowIfNull(pageSource)
+        ArgumentNullException.ThrowIfNull(triggers)
+
+        Dim compareInfo As CompareInfo = CultureInfo.InvariantCulture.CompareInfo
+        Dim compareinfoOptions As CompareOptions = CompareOptions.IgnoreCase Or CompareOptions.IgnoreNonSpace
+
+        Return triggers.Any(Function(trigger As String) compareInfo.IndexOf(pageSource, trigger, compareinfoOptions) >= 0)
+    End Function
+
+    ''' <summary>
     ''' Determines whether a given browser log entry message refers to a resource URL
     ''' that points to a file (e.g., CSS, JS, image file) rather than a page/document.
     ''' </summary>
@@ -1168,7 +1220,7 @@ Public Module PluginSupport
     ''' otherwise, <see langword="False"/>.
     ''' </returns>
     <DebuggerStepThrough>
-    Private Function IsResourceUrlLogEntryMessage(msg As String) As Boolean
+    Friend Function IsResourceUrlLogEntryMessage(msg As String) As Boolean
 
         Try
             Dim url As String = msg.Substring(0, msg.IndexOf(" "c))

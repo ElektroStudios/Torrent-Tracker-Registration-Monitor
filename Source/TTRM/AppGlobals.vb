@@ -14,6 +14,8 @@ Imports System.IO
 Imports System.Resources
 Imports System.Runtime.Loader
 
+Imports Microsoft.VisualBasic.ApplicationServices
+
 #End Region
 
 ''' <summary>
@@ -22,6 +24,22 @@ Imports System.Runtime.Loader
 Public Module AppGlobals
 
 #Region " Fields "
+
+    ''' <summary>
+    ''' The assembly information of this application (TTRM).
+    ''' <para></para>
+    ''' This field must be declared before any other field that depends on it.
+    ''' </summary>
+    ''' 
+    ''' <remarks>
+    ''' It is obtained from the TTRM assembly itself instead of <c>My.Application.Info</c>, 
+    ''' because the latter is based on the process entry assembly and requires creating the 
+    ''' <see cref="Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase"/> instance.
+    ''' <para></para>
+    ''' Both approaches return the same values when TTRM is the running executable, but this one also returns 
+    ''' the expected values when TTRM.dll is hosted by another process (e.g., a unit test runner).
+    ''' </remarks>
+    Private ReadOnly ApplicationAssemblyInfo As New AssemblyInfo(GetType(DynamicPlugin).Assembly)
 
     ''' <summary>
     ''' The official GitHub repository page for this application.
@@ -43,38 +61,38 @@ Public Module AppGlobals
     ''' The application title and version, formatted as "ProductName (AssemblyName) vMajor.Minor".
     ''' </summary>
     Public ReadOnly ApplicationTitleAndVersion As String =
-        $"{My.Application.Info.ProductName} ({My.Application.Info.AssemblyName}) " &
-        $"v{My.Application.Info.Version.Major}.{My.Application.Info.Version.Minor}.{My.Application.Info.Version.Build}"
+        $"{AppGlobals.ApplicationAssemblyInfo.ProductName} ({AppGlobals.ApplicationAssemblyInfo.AssemblyName}) " &
+        $"v{AppGlobals.ApplicationAssemblyInfo.Version.Major}.{AppGlobals.ApplicationAssemblyInfo.Version.Minor}.{AppGlobals.ApplicationAssemblyInfo.Version.Build}"
 
     ''' <summary>
     ''' Path to the plugins directory relative to the application's startup path.
     ''' </summary>
     Public ReadOnly PluginsDirectoryPath As String =
-        Path.Combine(My.Application.Info.DirectoryPath, "plugins")
+        Path.Combine(AppGlobals.ApplicationAssemblyInfo.DirectoryPath, "plugins")
 
     ''' <summary>
     ''' Directory path where to save the Jot cache data.
     ''' </summary>
     Public ReadOnly JotCachePath As String =
-        Path.Combine(My.Application.Info.DirectoryPath, "cache\jot")
+        Path.Combine(AppGlobals.ApplicationAssemblyInfo.DirectoryPath, "cache\jot")
 
     ''' <summary>
     ''' Directory path where to save the ChromeDriver cache data.
     ''' </summary>
     Public ReadOnly ChromeUserCachePath As String =
-        Path.Combine(My.Application.Info.DirectoryPath, "cache\plugins")
+        Path.Combine(AppGlobals.ApplicationAssemblyInfo.DirectoryPath, "cache\plugins")
 
     ''' <summary>
     ''' Directory path where to save the Selenium cache data.
     ''' </summary>
     Public ReadOnly SeleniumCachePath As String =
-        Path.Combine(My.Application.Info.DirectoryPath, "cache\selenium")
+        Path.Combine(AppGlobals.ApplicationAssemblyInfo.DirectoryPath, "cache\selenium")
 
     ''' <summary>
     ''' Directory path where the <c>selenium-manager.exe</c> file is located.
     ''' </summary>
     Public ReadOnly SeleniumManagerExecPath As String =
-        Path.Combine(My.Application.Info.DirectoryPath, "runtimes\win\native\selenium-manager.exe")
+        Path.Combine(AppGlobals.ApplicationAssemblyInfo.DirectoryPath, "runtimes\win\native\selenium-manager.exe")
 
     ''' <summary>
     ''' List of language items for populating language selection ComboBox.
@@ -98,7 +116,7 @@ Public Module AppGlobals
     ''' <summary>
     ''' Gets the resource manager that provides access to localized string resources for this assembly.
     ''' </summary>
-    Friend StringsResourceManager As New ResourceManager($"{My.Application.Info.AssemblyName}.Strings", GetType(DynamicPlugin).Assembly)
+    Friend StringsResourceManager As New ResourceManager($"{GetType(DynamicPlugin).Assembly.GetName().Name}.Strings", GetType(DynamicPlugin).Assembly)
 
     ''' <summary>
     ''' The <see cref="AssemblyLoadContext"/> instance used to load and isolate dynamically compiled plugin assemblies.

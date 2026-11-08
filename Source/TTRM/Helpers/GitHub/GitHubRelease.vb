@@ -66,6 +66,7 @@ Imports System.ComponentModel
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Globalization
 Imports System.Linq
+Imports System.Text.RegularExpressions
 Imports System.Xml.Linq
 
 #End Region
@@ -118,15 +119,23 @@ Namespace DevCase.ThirdParty.GitHub
         ''' </remarks>
         Public ReadOnly Property Version As Version
             Get
-                ' Remove prefixes and suffixes from tagname, like: "v1.0", "1.0-alpha" or "1.0-beta".
-                Dim str As String = Me.TagName.ToLower().
-                                           Trim("abcdefghijklmnopqrstuvwxyz !·$%&/()=?\|@#~'^*¨;:,.{}[]+".ToArray())
+                ' Extract the numeric version part from tagname, ignoring prefixes and suffixes like:
+                ' "v1.0", "1.0-alpha", "1.0-beta", "v1.2.0-rc1" or "release-1.2.3".
+                '
+                ' Note: The previous approach (trimming letters and symbols from both ends of the string)
+                ' did not handle the "-" separator nor suffixes ending with a digit (e.g., "1.0-beta", "1.0-rc1"),
+                ' which caused the version to be unrecognized (Nothing).
+                If String.IsNullOrEmpty(Me.TagName) Then
+                    Return Nothing
+                End If
+
+                Dim match As Match = Regex.Match(Me.TagName, "\d+(?:\.\d+){1,3}", RegexOptions.CultureInvariant)
+                If Not match.Success Then
+                    Return Nothing
+                End If
 
                 Dim result As Version = Nothing
-#Disable Warning CA1806 ' Do not ignore method results
-                Version.TryParse(str, result)
-#Enable Warning CA1806 ' Do not ignore method results
-                Return result
+                Return If(Version.TryParse(match.Value, result), result, Nothing)
             End Get
         End Property
 

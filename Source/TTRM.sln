@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36212.18 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TTRM", "TTRM\TTRM.vbproj", "{EDF6F055-6032-475E-896B-0BC97470CE59}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TTRM.Tests", "TTRM.Tests\TTRM.Tests.vbproj", "{B0A22829-0C69-43B8-8F7C-6CA54C5F7BB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{EDF6F055-6032-475E-896B-0BC97470CE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDF6F055-6032-475E-896B-0BC97470CE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDF6F055-6032-475E-896B-0BC97470CE59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A22829-0C69-43B8-8F7C-6CA54C5F7BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A22829-0C69-43B8-8F7C-6CA54C5F7BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A22829-0C69-43B8-8F7C-6CA54C5F7BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A22829-0C69-43B8-8F7C-6CA54C5F7BB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

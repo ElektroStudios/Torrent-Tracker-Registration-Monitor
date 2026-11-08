@@ -10,6 +10,7 @@ Option Infer Off
 
 Imports System.ComponentModel
 Imports System.Globalization
+Imports System.Threading
 
 Imports DarkUI.Controls
 
@@ -45,6 +46,13 @@ Public NotInheritable Class MainForm : Inherits DarkUI.Forms.DarkForm
     ''' Indicates whether a plugin is running as a result of automatic plugin execution trigger.
     ''' ''' </summary>
     Friend IsRunningPluginsAutomatically As Boolean
+
+    ''' <summary>
+    ''' The number of plugins that are currently running (manually or automatically).
+    ''' <para></para>
+    ''' This value must be modified only through <see cref="System.Threading.Interlocked"/> methods.
+    ''' </summary>
+    Friend RunningPluginCount As Integer
 
     ''' <summary>
     ''' Flag that indicates whether the plugins must run in paralell execution.
@@ -484,11 +492,25 @@ Public NotInheritable Class MainForm : Inherits DarkUI.Forms.DarkForm
     <DebuggerStepThrough>
     Private Sub DarkCheckBoxSystemSleep_CheckedChanged(sender As Object, e As EventArgs) Handles DarkCheckBox_SystemSleep.CheckedChanged
 
-        Dim cb As CheckBox = DirectCast(sender, CheckBox)
-        If cb.Checked Then
+        Me.UpdateSystemSleepPrevention()
+    End Sub
+
+    ''' <summary>
+    ''' Prevents or allows the system to enter sleep mode, 
+    ''' depending on whether both the automatic plugin execution and the "Prevent system sleep" options are enabled.
+    ''' </summary>
+    ''' 
+    ''' <remarks>
+    ''' Note: Previously, the <see cref="ExecutionStateFlags.DisplayRequired"/> flag was also set, 
+    ''' which additionally prevented the display from turning off (not only the system sleep), 
+    ''' and the sleep prevention remained active even after disabling the automatic plugin execution.
+    ''' </remarks>
+    <DebuggerStepThrough>
+    Private Sub UpdateSystemSleepPrevention()
+
+        If Me.DarkCheckBox_AutoPluginRun.Checked AndAlso Me.DarkCheckBox_SystemSleep.Checked Then
             NativeMethods.SetThreadExecutionState(ExecutionStateFlags.Continuous Or
-                                                  ExecutionStateFlags.SystemRequired Or
-                                                  ExecutionStateFlags.DisplayRequired)
+                                                  ExecutionStateFlags.SystemRequired)
         Else
             NativeMethods.SetThreadExecutionState(ExecutionStateFlags.Continuous)
         End If
@@ -554,6 +576,7 @@ Public NotInheritable Class MainForm : Inherits DarkUI.Forms.DarkForm
         Me.DarkButtonImageAllignFix_RunAllSelectedPluginsNow.Enabled = cb.Checked AndAlso (Me.CheckedListBox_AutoPluginRun.CheckedItems.Count <> 0)
 
         ApplicationHelper.ResetRemainingAutoPluginRunInterval()
+        Me.UpdateSystemSleepPrevention()
 
         Dim anyCheckedPlugins As Boolean = Me.CheckedListBox_AutoPluginRun.CheckedItems.Count <> 0
         If Not cb.Checked Then
@@ -700,7 +723,10 @@ Public NotInheritable Class MainForm : Inherits DarkUI.Forms.DarkForm
     Private Async Sub TimerAutoRunPlugins_Tick(sender As Object, e As EventArgs) Handles Timer_AutoRunPlugins.Tick
 
         ' If a plugin execution is in progress...
-        If Not Me.DarkSectionPanel_Plugins.Enabled Then
+        ' Note: Previously, this checked whether "DarkSectionPanel_Plugins" was disabled, but that panel is never disabled,
+        ' so an automatic execution could start while a plugin was being run manually 
+        ' (even the same plugin, sharing the same Chrome user profile directory).
+        If Me.PluginWorkInProgress Then
             Exit Sub
         End If
 
@@ -710,58 +736,67 @@ Public NotInheritable Class MainForm : Inherits DarkUI.Forms.DarkForm
         If Me.RemainingAutoPluginRunInterval.TotalMilliseconds <= 0 Then
             Me.Timer_AutoRunPlugins.Stop()
 
-            If Me.DarkCheckBox_DontRunIfFullscreen.Checked Then
-                Do While ApplicationHelper.IsFullscreenAppRunning()
-                    Await Task.Delay(TimeSpan.FromSeconds(10))
-                Loop
-            End If
+            ' Note: The state is always restored in the "Finally" block. Previously, any unexpected exception
+            ' left the automatic execution timer stopped forever and the "plugin work in progress" state stuck.
+            Try
+                If Me.DarkCheckBox_DontRunIfFullscreen.Checked Then
+                    Do While ApplicationHelper.IsFullscreenAppRunning()
+                        Await Task.Delay(TimeSpan.FromSeconds(10))
+                    Loop
+                End If
 
-            Dim pluginsToRun As List(Of DynamicPlugin) =
-                Me.CheckedListBox_AutoPluginRun.CheckedItems?.Cast(Of DynamicPlugin).ToList()
+                Dim pluginsToRun As List(Of DynamicPlugin) =
+                    Me.CheckedListBox_AutoPluginRun.CheckedItems.Cast(Of DynamicPlugin).ToList()
 
-            Me.NotifyIcon_Main.ShowBalloonTip(5000, My.Application.Info.AssemblyName, My.Resources.Strings.ExecutingPluginsTooltip, ToolTipIcon.Info)
+                Me.NotifyIcon_Main.ShowBalloonTip(5000, My.Application.Info.AssemblyName, My.Resources.Strings.ExecutingPluginsTooltip, ToolTipIcon.Info)
 
-            Me.IsRunningPluginsAutomatically = True
-            Me.PluginWorkInProgress = True
+                Me.IsRunningPluginsAutomatically = True
+                Me.PluginWorkInProgress = True
 
-            If Me.ParalellExecutionEnabled Then
-                Dim chromeMemPerInstanceGB As Double = 0.5 ' 500 MB estimated.
-                Dim freeMemGB As Double = My.Computer.Info.AvailablePhysicalMemory / (1024 ^ 3)
-                Dim maxByMem As Integer = CInt(Math.Min(8, Math.Floor(freeMemGB / chromeMemPerInstanceGB)))
-                Dim maxByCpu As Integer = Environment.ProcessorCount \ 2
-                Dim maxChromeInstances As Integer = Math.Max(2, Math.Min(Math.Min(maxByMem, maxByCpu), 8))
+                If Me.ParalellExecutionEnabled Then
+                    Dim chromeMemPerInstanceGB As Double = 0.5 ' 500 MB estimated.
+                    Dim freeMemGB As Double = My.Computer.Info.AvailablePhysicalMemory / (1024 ^ 3)
+                    Dim maxByMem As Integer = CInt(Math.Min(8, Math.Floor(freeMemGB / chromeMemPerInstanceGB)))
+                    Dim maxByCpu As Integer = Environment.ProcessorCount \ 2
+                    Dim maxChromeInstances As Integer = Math.Max(2, Math.Min(Math.Min(maxByMem, maxByCpu), 8))
 
-                Dim parallelOptions As New ParallelOptions With {
-                    .MaxDegreeOfParallelism = maxChromeInstances
-                }
-                Await Parallel.ForEachAsync(pluginsToRun, parallelOptions,
-                          Function(plugin, ct)
-                              Return New ValueTask(
-                                  Task.Run(
-                                      Async Function()
-                                          Dim regFlags As RegistrationFlags = Await UIHelper.RunPluginFromButtonAsync(plugin)
-                                          UIHelper.UpdateStatusLabelText(plugin, regFlags)
-                                      End Function, ct))
-                          End Function)
+                    Dim parallelOptions As New ParallelOptions With {
+                        .MaxDegreeOfParallelism = maxChromeInstances
+                    }
+                    Await Parallel.ForEachAsync(pluginsToRun, parallelOptions,
+                              Function(plugin, ct)
+                                  Return New ValueTask(
+                                      Task.Run(
+                                          Async Function()
+                                              Dim regFlags As RegistrationFlags = Await UIHelper.RunPluginFromButtonAsync(plugin).ConfigureAwait(False)
+                                              UIHelper.UpdateStatusLabelText(plugin, regFlags)
+                                          End Function, ct))
+                              End Function)
 
-            Else
-                For Each plugin As DynamicPlugin In pluginsToRun
-                    Dim regFlags As RegistrationFlags = Await UIHelper.RunPluginFromButtonAsync(plugin)
-                    UIHelper.UpdateStatusLabelText(plugin, regFlags)
-                Next
+                Else
+                    For Each plugin As DynamicPlugin In pluginsToRun
+                        Dim regFlags As RegistrationFlags = Await UIHelper.RunPluginFromButtonAsync(plugin)
+                        UIHelper.UpdateStatusLabelText(plugin, regFlags)
+                    Next
 
-            End If
+                End If
 
-            Me.IsRunningPluginsAutomatically = False
-            Me.PluginWorkInProgress = False
+            Finally
+                Me.IsRunningPluginsAutomatically = False
+                ' A plugin could have been started manually during the automatic execution.
+                Me.PluginWorkInProgress = Volatile.Read(Me.RunningPluginCount) > 0
 
-            UIHelper.ToggleControlsEnabledState(enable:=True)
-            Me.UseWaitCursor = False
-            Cursor.Current = Cursors.Default
+                If Not Me.PluginWorkInProgress Then
+                    UIHelper.ToggleControlsEnabledState(enable:=True)
+                    Me.UseWaitCursor = False
+                    Cursor.Current = Cursors.Default
+                End If
 
-            NotifyIconExtensions.CloseBallontip(Me.NotifyIcon_Main)
-            ApplicationHelper.ResetRemainingAutoPluginRunInterval()
-            Me.Timer_AutoRunPlugins.Start()
+                NotifyIconExtensions.CloseBallontip(Me.NotifyIcon_Main)
+                ApplicationHelper.ResetRemainingAutoPluginRunInterval()
+                Me.Timer_AutoRunPlugins.Start()
+
+            End Try
         End If
 
         UIHelper.UpdateStatusLabelText()

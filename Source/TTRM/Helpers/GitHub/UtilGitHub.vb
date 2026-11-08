@@ -180,7 +180,7 @@ Namespace DevCase.ThirdParty.GitHub
         ''' </returns>
         Public Shared Function GetReleases(userName As String, repositoryName As String) As ReadOnlyCollection(Of GitHubRelease)
 
-            Dim t As Task(Of ReadOnlyCollection(Of GitHubRelease)) = Task.Run(Function() UtilGitHub.GetReleases(userName, repositoryName))
+            Dim t As Task(Of ReadOnlyCollection(Of GitHubRelease)) = Task.Run(Function() UtilGitHub.GetReleasesAsync(userName, repositoryName))
             t.Wait(Timeout.Infinite)
 
             Return t.Result
@@ -268,7 +268,7 @@ Namespace DevCase.ThirdParty.GitHub
         ''' </returns>
         Public Shared Function GetRelease(userName As String, repositoryName As String, version As Version) As GitHubRelease
 
-            Dim t As Task(Of GitHubRelease) = Task.Run(Function() UtilGitHub.GetRelease(userName, repositoryName, version))
+            Dim t As Task(Of GitHubRelease) = Task.Run(Function() UtilGitHub.GetReleaseAsync(userName, repositoryName, version))
             t.Wait(Timeout.Infinite)
 
             Return t.Result
