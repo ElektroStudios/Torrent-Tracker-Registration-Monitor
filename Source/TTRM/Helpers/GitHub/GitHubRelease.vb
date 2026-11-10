@@ -129,7 +129,7 @@ Namespace DevCase.ThirdParty.GitHub
                     Return Nothing
                 End If
 
-                Dim match As Match = Regex.Match(Me.TagName, "\d+(?:\.\d+){1,3}", RegexOptions.CultureInvariant)
+                Dim match As Match = Regex.Match(Me.TagName, "\d+(?:\.\d+){1,3}", RegexOptions.CultureInvariant, TimeSpan.FromSeconds(10))
                 If Not match.Success Then
                     Return Nothing
                 End If
